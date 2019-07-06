@@ -31,7 +31,7 @@ namespace Clinic.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize(Policy = "RequireAdminRole")]
+        //[Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> GetInsurance_companiesAsync()
         {
             if (_db.Insurance_Companies.Count() != 0)
@@ -55,7 +55,7 @@ namespace Clinic.Controllers
                     result.Add(insModel);
                 }
 
-                return Ok(new JsonResult(result));
+                return Ok(result);
             }
             else
                 return BadRequest(new JsonResult("No insurance companies to show"));

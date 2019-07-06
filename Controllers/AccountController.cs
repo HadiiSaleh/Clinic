@@ -95,7 +95,7 @@ namespace Clinic.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, loginViewModel.Password))
             {
                 // THen Check If Email Is confirmed
-                /*if (!await _userManager.IsEmailConfirmedAsync(user))
+                if (!await _userManager.IsEmailConfirmedAsync(user))
                 {
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -106,7 +106,7 @@ namespace Clinic.Controllers
                     ModelState.AddModelError(string.Empty, "User Has not Confirmed Email.");
 
                     return Unauthorized(new { LoginError = "We sent you an Confirmation Email. Please Confirm Your Registration With MyClinic.com To Log in." });
-                }*/
+                }
 
                 var roles = await _userManager.GetRolesAsync(user);
                 

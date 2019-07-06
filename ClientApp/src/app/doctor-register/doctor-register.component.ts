@@ -33,6 +33,7 @@ export class DoctorRegisterComponent implements OnInit {
   dr_speciality: FormControl;
   dr_address: FormControl;
   dr_about: FormControl;
+
   errorList: string[];
   modalMessage: string;
   phoneRegex = "[+][0-9]{3} [0-9]{8}";

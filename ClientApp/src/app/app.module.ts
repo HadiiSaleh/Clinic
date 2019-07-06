@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { DoctorRegisterComponent } from './doctor-register/doctor-register.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PatientRegisterComponent } from './patient-register/patient-register.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     HomeComponent,
     ForgetPasswordComponent,
     DoctorRegisterComponent,
+    PatientRegisterComponent,
   ],
   imports: [
     BrowserModule,

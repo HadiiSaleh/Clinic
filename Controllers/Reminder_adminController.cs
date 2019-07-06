@@ -14,93 +14,61 @@ namespace Clinic.Controllers
     [ApiController]
     public class Reminder_adminController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _db;
 
-        public Reminder_adminController(ApplicationDbContext context)
+        public Reminder_adminController(ApplicationDbContext db)
         {
-            _context = context;
+            _db = db;
         }
 
         // GET: api/Reminder_admin
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reminder_admin>>> GetReminder_Admins()
+        public IActionResult GetReminder_Admins()
         {
-            return await _context.Reminder_Admins.ToListAsync();
+            if (_db.Reminder_Admins.Count() != 0)
+                return Ok(_db.Reminder_Admins.ToList());
+
+            return BadRequest(new JsonResult("No Reminders to show"));
         }
 
         // GET: api/Reminder_admin/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reminder_admin>> GetReminder_admin(int id)
+        public async Task<IActionResult> GetReminder_admin(int id)
         {
-            var reminder_admin = await _context.Reminder_Admins.FindAsync(id);
+            var reminder_admin = await _db.Reminder_Admins.FindAsync(id);
 
             if (reminder_admin == null)
             {
                 return NotFound();
             }
 
-            return reminder_admin;
-        }
-
-        // PUT: api/Reminder_admin/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutReminder_admin(int id, Reminder_admin reminder_admin)
-        {
-            if (id != reminder_admin.reminder_id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(reminder_admin).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!Reminder_adminExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(reminder_admin);
         }
 
         // POST: api/Reminder_admin
         [HttpPost]
         public async Task<ActionResult<Reminder_admin>> PostReminder_admin(Reminder_admin reminder_admin)
         {
-            _context.Reminder_Admins.Add(reminder_admin);
-            await _context.SaveChangesAsync();
+            _db.Reminder_Admins.Add(reminder_admin);
+            await _db.SaveChangesAsync();
 
-            return CreatedAtAction("GetReminder_admin", new { id = reminder_admin.reminder_id }, reminder_admin);
+            return Ok(new { id = reminder_admin.reminder_id });
         }
 
         // DELETE: api/Reminder_admin/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Reminder_admin>> DeleteReminder_admin(int id)
         {
-            var reminder_admin = await _context.Reminder_Admins.FindAsync(id);
+            var reminder_admin = await _db.Reminder_Admins.FindAsync(id);
             if (reminder_admin == null)
             {
                 return NotFound();
             }
 
-            _context.Reminder_Admins.Remove(reminder_admin);
-            await _context.SaveChangesAsync();
+            _db.Reminder_Admins.Remove(reminder_admin);
+            await _db.SaveChangesAsync();
 
-            return reminder_admin;
-        }
-
-        private bool Reminder_adminExists(int id)
-        {
-            return _context.Reminder_Admins.Any(e => e.reminder_id == id);
+            return Ok("Deleted Successfully");
         }
     }
 }
