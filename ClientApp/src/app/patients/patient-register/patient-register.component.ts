@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, Validators, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { PatientService } from '../services/patient.service';
+import { PatientService } from '../../services/patient.service';
 import { Observable } from 'rxjs';
-import { InsuranceService } from '../services/insurance.service';
-import { InsuranceCompany } from '../interfaces/insurance-company';
+import { InsuranceService } from '../../services/insurance.service';
+import { InsuranceCompany } from '../../interfaces/insurance-company';
 
 export interface Blood {
   value: string;

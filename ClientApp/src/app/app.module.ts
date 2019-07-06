@@ -9,9 +9,9 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
-import { DoctorRegisterComponent } from './doctor-register/doctor-register.component';
+import { DoctorRegisterComponent } from './doctors/doctor-register/doctor-register.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PatientRegisterComponent } from './patient-register/patient-register.component';
+import { PatientRegisterComponent } from './patients/patient-register/patient-register.component';
 
 @NgModule({
   declarations: [
