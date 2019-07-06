@@ -96,7 +96,7 @@ namespace Clinic.Controllers
         }
 
         [HttpPost("[action]")]
-        //[Authorize(Policy = "RequireAdminRole")]
+        [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> AddDoctor([FromBody] DoctorModel doctor)
         {
             if (!ModelState.IsValid)

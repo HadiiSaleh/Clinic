@@ -7,11 +7,12 @@ import { LoginComponent } from './login/login.component';
 import { MessagesComponent } from './messages/messages.component';
 import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { DoctorRegisterComponent } from './doctors/doctor-register/doctor-register.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PatientRegisterComponent } from './patients/patient-register/patient-register.component';
+import { JwtInterceptor } from './_helper/jwt.Interceptor';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { PatientRegisterComponent } from './patients/patient-register/patient-re
     HttpClientModule,
     ModalModule.forRoot(),
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
