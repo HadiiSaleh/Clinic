@@ -8,6 +8,8 @@ namespace Clinic.Models
 {
     public class Insurance_companyModel
     {
+        public string cid { get; set; }
+
         [Required]
         [StringLength(50, ErrorMessage = "Maximum length is {1}")]
         public String ins_username { get; set; }

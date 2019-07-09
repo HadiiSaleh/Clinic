@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clinic.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190430130854_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190708182612_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,10 +36,6 @@ namespace Clinic.Migrations
                     b.Property<string>("admin_mname")
                         .HasMaxLength(50);
 
-                    b.Property<string>("admin_phone")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
                     b.HasKey("admin_id");
 
                     b.ToTable("Admins");
@@ -62,11 +58,8 @@ namespace Clinic.Migrations
                     b.Property<string>("as_mname")
                         .HasMaxLength(50);
 
-                    b.Property<string>("as_phone")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
-                    b.Property<int>("as_userID");
+                    b.Property<string>("as_user_id")
+                        .IsRequired();
 
                     b.HasKey("as_id");
 
@@ -98,6 +91,7 @@ namespace Clinic.Migrations
                     b.Property<int>("cons_pat_id");
 
                     b.Property<string>("cons_symptoms")
+                        .IsRequired()
                         .HasMaxLength(500);
 
                     b.Property<string>("cons_temp")
@@ -106,7 +100,7 @@ namespace Clinic.Migrations
                     b.Property<string>("cons_title")
                         .HasMaxLength(100);
 
-                    b.Property<int>("cons_treatment")
+                    b.Property<string>("cons_treatment")
                         .HasMaxLength(500);
 
                     b.Property<string>("cons_type")
@@ -154,10 +148,6 @@ namespace Clinic.Migrations
                     b.Property<string>("dr_address")
                         .HasMaxLength(100);
 
-                    b.Property<string>("dr_email")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<string>("dr_fname")
                         .HasMaxLength(50);
 
@@ -170,22 +160,11 @@ namespace Clinic.Migrations
                     b.Property<string>("dr_mname")
                         .HasMaxLength(50);
 
-                    b.Property<string>("dr_password")
-                        .IsRequired()
-                        .HasMaxLength(300);
-
-                    b.Property<string>("dr_phone")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
                     b.Property<string>("dr_speciality")
                         .HasMaxLength(100);
 
-                    b.Property<int>("dr_userID");
-
-                    b.Property<string>("dr_username")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("dr_user_id")
+                        .IsRequired();
 
                     b.HasKey("dr_id");
 
@@ -194,7 +173,9 @@ namespace Clinic.Migrations
 
             modelBuilder.Entity("Clinic.Models.Insurance_company", b =>
                 {
-                    b.Property<int>("ins_id");
+                    b.Property<int>("ins_id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ins_name")
                         .HasMaxLength(100);
@@ -205,11 +186,8 @@ namespace Clinic.Migrations
                     b.Property<string>("ins_fax")
                         .HasMaxLength(100);
 
-                    b.Property<string>("ins_phone")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
-                    b.Property<int>("ins_userID");
+                    b.Property<string>("ins_user_id")
+                        .IsRequired();
 
                     b.HasKey("ins_id", "ins_name");
 
@@ -228,7 +206,8 @@ namespace Clinic.Migrations
                         .IsRequired()
                         .HasMaxLength(500);
 
-                    b.Property<int>("m_sender_id");
+                    b.Property<string>("m_sender_id")
+                        .IsRequired();
 
                     b.Property<string>("m_subject")
                         .IsRequired();
@@ -269,14 +248,11 @@ namespace Clinic.Migrations
                     b.Property<string>("pat_mname")
                         .HasMaxLength(50);
 
-                    b.Property<string>("pat_phone")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
                     b.Property<string>("pat_picture")
                         .HasMaxLength(500);
 
-                    b.Property<int>("pat_userID");
+                    b.Property<string>("pat_user_id")
+                        .IsRequired();
 
                     b.HasKey("pat_id");
 
@@ -414,7 +390,8 @@ namespace Clinic.Migrations
 
                     b.Property<int>("report_cons_id");
 
-                    b.Property<int>("report_ins_id");
+                    b.Property<string>("report_ins_name")
+                        .IsRequired();
 
                     b.HasKey("report_id");
 
@@ -423,6 +400,23 @@ namespace Clinic.Migrations
                     b.HasIndex("Insurance_companyins_id", "Insurance_companyins_name");
 
                     b.ToTable("Reports");
+                });
+
+            modelBuilder.Entity("Clinic.Models.ResetPasswordViewModel", b =>
+                {
+                    b.Property<string>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConfirmPassword");
+
+                    b.Property<string>("code");
+
+                    b.Property<string>("password")
+                        .HasMaxLength(100);
+
+                    b.HasKey("id");
+
+                    b.ToTable("ResetPasswordViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

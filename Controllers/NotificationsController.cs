@@ -20,5 +20,17 @@ namespace Clinic.Controllers
 
             return View();
         }
+
+        public IActionResult PassReset(string id, string code)
+        {
+            if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(code))
+            {
+                return Redirect("/login");
+
+            }
+
+            return View();
+        }
+        
     }
 }

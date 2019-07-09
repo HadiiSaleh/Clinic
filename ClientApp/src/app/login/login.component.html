@@ -1,4 +1,3 @@
-<app-nav-menu></app-nav-menu>
 <!-- LOGIN SECTION -->
 <section class="login-block">
   <!-- ALERT  WARNING START -->
@@ -38,9 +37,8 @@
           <input type="submit" class="btn btn-login btn-block" value="Submit" [disabled]="insertForm.invalid" />
 
         </form><!-- LOGIN FORM END -->
-
-        <a href="reset-password">forgot your password?</a>
-
+        <br />
+        <a [routerLink]='["/reset-password"]'>forgot your password?</a><br /><br />
       </div> <!-- LOGIN SECTION END -->
       <!-- CAROUSEL COLUMN START -->
       <div class="col-md-8 banner-sec">

@@ -13,6 +13,8 @@ import { DoctorRegisterComponent } from './doctors/doctor-register/doctor-regist
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PatientRegisterComponent } from './patients/patient-register/patient-register.component';
 import { JwtInterceptor } from './_helper/jwt.Interceptor';
+import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { JwtInterceptor } from './_helper/jwt.Interceptor';
     ForgetPasswordComponent,
     DoctorRegisterComponent,
     PatientRegisterComponent,
+    DoctorListComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import { JwtInterceptor } from './_helper/jwt.Interceptor';
     ReactiveFormsModule,
     HttpClientModule,
     ModalModule.forRoot(),
+    DataTablesModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]

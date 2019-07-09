@@ -1,0 +1,286 @@
+<div class="container-fluid">
+
+  <button class="btn btn-warning mb-3 float-right text-uppercase" *ngIf="userRoleStatus == 'Admin'" (click)="onAddCompany()"><i class="fa fa-plus"></i> Add Company</button>
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border hover" style="width:100%">
+    <thead class="text-center thead-dark">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>Fax</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let company of companies" class="text-center">
+        <td>{{company.cid}}</td>
+        <td>{{company.ins_name | uppercase}}</td>
+        <td>{{company.ins_username}}</td>
+        <td>{{company.ins_email}}</td>
+        <td>{{company.ins_phone}}</td>
+        <td>{{company.ins_address}}</td>
+        <td>{{company.ins_fax}}</td>
+        <td>
+          <div class="btn-group mt-2" role="group">
+            <button type="button" class="btn btn-success" (click)="onSelect(company)"><i class="fas fa-list"></i></button>
+            <button type="button" class="btn btn-primary" *ngIf="userRoleStatus == 'Admin'" (click)="onUpdateModal(company)"><i class="fas fa-edit"></i></button>
+            <button type="button" class="btn btn-danger" *ngIf="userRoleStatus == 'Admin'" (click)="onDelete(company)"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ADD Company MODAL START-->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title">ADD NEW INSURANCE COMPANY</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="ins_name" formControlName="ins_name" class="form-control" placeholder="name - Max 100 Characters " aria-label="Name" aria-describedby="InsName">
+          </div>
+          <div class="errorMessage" *ngIf="ins_name.touched && ins_name.errors">
+            <span *ngIf="ins_name.hasError('required')">Company Name is required.</span>
+            <span *ngIf="ins_name.hasError('pattern')">Only characters allowed for Company Name.</span>
+            <span *ngIf="ins_name.hasError('maxlength')">Only 100 characters allowed for Company Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsUsername"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="ins_username" class="form-control" placeholder="Username - Max 50 Characters" aria-label="Username" aria-describedby="InsUsername">
+          </div>
+          <div class="errorMessage" *ngIf="ins_username.touched && ins_username.errors">
+            <span *ngIf="ins_username.hasError('required')">Username is required.</span>
+            <span *ngIf="ins_username.hasError('maxlength')">Only 50 characters allowed for Username.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Password"><i class="fas fa-lock"></i></span>
+            </div>
+            <input type="password" formControlName="ins_password" class="form-control" placeholder="Password - Max 100 Characters" aria-label="Password" aria-describedby="Password">
+          </div>
+          <div class="errorMessage" *ngIf="ins_password.touched && ins_password.errors">
+            <span *ngIf="ins_password.hasError('required')">Password is required.</span>
+            <span *ngIf="ins_password.hasError('maxlength')">Only 100 characters allowed for Password.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="ConfirmPassword"><i class="fas fa-lock"></i></span>
+            </div>
+            <input type="password" formControlName="ConfirmPassword" class="form-control" placeholder="Confirm Password - Max 100 Characters" aria-label="ConfirmPassword" aria-describedby="ConfirmPassword">
+          </div>
+          <div class="errorMessage" *ngIf="ConfirmPassword.touched && ConfirmPassword.errors">
+            <span *ngIf="ConfirmPassword.hasError('required')">Confirmation Password is required.</span>
+            <span *ngIf="ConfirmPassword.hasError('mustMatch')">Password must match.</span>
+            <span *ngIf="ConfirmPassword.hasError('maxlength')">Only 100 characters allowed for >Confirmation Password .</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsEmail"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="ins_email" class="form-control" placeholder="eg:hadiisaleh@outlook.com - Max 256 Characters" aria-label="Email" aria-describedby="InsEmail">
+          </div>
+          <div class="errorMessage" *ngIf="ins_email.touched && ins_email.errors">
+            <span *ngIf="ins_email.hasError('required')">Email is required.</span>
+            <span *ngIf="ins_email.hasError('email')">Invalid Email.</span>
+            <span *ngIf="ins_email.hasError('maxlength')">Only 256 characters allowed for Email.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsPhone"><i class="fas fa-phone-square"></i></span>
+            </div>
+            <input type="text" formControlName="ins_phone" class="form-control" placeholder="eg:+961 03051763 - Max 100 Characters" aria-label="Phone" aria-describedby="InsPhone">
+          </div>
+          <div class="errorMessage" *ngIf="ins_phone.touched && ins_phone.errors">
+            <span *ngIf="ins_phone.hasError('required')">Phone is required.</span>
+            <span *ngIf="ins_phone.hasError('pattern')">Invalid Phone.</span>
+            <span *ngIf="ins_phone.hasError('maxlength')">Only 100 characters allowed for Phone.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsAddress"><i class="fas fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="ins_address" class="form-control" placeholder="Address - Max 100 Characters" aria-label="Address" aria-describedby="InsAddress">
+          </div>
+          <div class="errorMessage" *ngIf="ins_address.touched && ins_address.errors">
+            <span *ngIf="ins_address.hasError('required')">Address is required.</span>
+            <span *ngIf="ins_address.hasError('maxlength')">Only 100 characters allowed for Address.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsFax"><i class="fa fa-fax" aria-hidden="true"></i></span>
+            </div>
+            <input type="text" formControlName="ins_fax" class="form-control" placeholder="eg:+961 03051763 - Max 100 Characters" aria-label="Fax" aria-describedby="InsFax">
+          </div>
+          <div class="errorMessage" *ngIf="ins_fax.touched && ins_fax.errors">
+            <span *ngIf="ins_fax.hasError('required')">Fax is required.</span>
+            <span *ngIf="ins_fax.hasError('pattern')">Invalid Fax.</span>
+            <span *ngIf="ins_fax.hasError('maxlength')">Only 100 characters allowed for Fax.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <button [disabled]="insertForm.invalid" class="btn btn-primary btn-block">ADD</button>
+        </li>
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+<!-- ADD Company MODAL START-->
+<!-- EDIT Company MODAL START-->
+
+<ng-template #editTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">EDIT INSURANCE COMPANY DETAILS</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Id"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" disabled id="cid" formControlName="cid" class="form-control" placeholder="Id " aria-label="Id" aria-describedby="Id">
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="ins_name" disabled formControlName="ins_name" class="form-control" placeholder="name - Max 100 Characters " aria-label="Name" aria-describedby="InsName">
+          </div>
+          <div class="errorMessage" *ngIf="_ins_name.touched && _ins_name.errors">
+            <span *ngIf="_ins_name.hasError('required')">Company Name is required.</span>
+            <span *ngIf="_ins_name.hasError('pattern')">Only characters allowed for Company Name.</span>
+            <span *ngIf="_ins_name.hasError('maxlength')">Only 100 characters allowed for Company Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsUsername"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="ins_username" formControlName="ins_username" class="form-control" placeholder="Username - Max 50 Characters" aria-label="Username" aria-describedby="InsUsername">
+          </div>
+          <div class="errorMessage" *ngIf="_ins_username.touched && _ins_username.errors">
+            <span *ngIf="_ins_username.hasError('required')">Username is required.</span>
+            <span *ngIf="_ins_username.hasError('maxlength')">Only 50 characters allowed for Username.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsEmail"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="ins_email" formControlName="ins_email" class="form-control" placeholder="eg:hadiisaleh@outlook.com - Max 256 Characters" aria-label="Email" aria-describedby="InsEmail">
+          </div>
+          <div class="errorMessage" *ngIf="_ins_email.touched && _ins_email.errors">
+            <span *ngIf="_ins_email.hasError('required')">Email is required.</span>
+            <span *ngIf="_ins_email.hasError('email')">Invalid Email.</span>
+            <span *ngIf="_ins_email.hasError('maxlength')">Only 256 characters allowed for Email.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsPhone"><i class="fas fa-phone-square"></i></span>
+            </div>
+            <input type="text" id="ins_phone" formControlName="ins_phone" class="form-control" placeholder="eg:+961 03051763 - Max 100 Characters" aria-label="Phone" aria-describedby="InsPhone">
+          </div>
+          <div class="errorMessage" *ngIf="_ins_phone.touched && _ins_phone.errors">
+            <span *ngIf="_ins_phone.hasError('required')">Phone is required.</span>
+            <span *ngIf="_ins_phone.hasError('pattern')">Invalid Phone.</span>
+            <span *ngIf="_ins_phone.hasError('maxlength')">Only 100 characters allowed for Phone.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsAddress"><i class="fas fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="ins_address" formControlName="ins_address" class="form-control" placeholder="Address - Max 100 Characters" aria-label="Address" aria-describedby="InsAddress">
+          </div>
+          <div class="errorMessage" *ngIf="_ins_address.touched && _ins_address.errors">
+            <span *ngIf="_ins_address.hasError('required')">Address is required.</span>
+            <span *ngIf="_ins_address.hasError('maxlength')">Only 100 characters allowed for Address.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="InsFax"><i class="fa fa-fax" aria-hidden="true"></i></span>
+            </div>
+            <input type="text" id="ins_fax" formControlName="ins_fax" class="form-control" placeholder="eg:+961 03051763 - Max 100 Characters" aria-label="Fax" aria-describedby="InsFax">
+          </div>
+          <div class="errorMessage" *ngIf="_ins_fax.touched && _ins_fax.errors">
+            <span *ngIf="_ins_fax.hasError('required')">Fax is required.</span>
+            <span *ngIf="_ins_fax.hasError('pattern')">Invalid Fax.</span>
+            <span *ngIf="_ins_fax.hasError('maxlength')">Only 100 characters allowed for Fax.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <button [disabled]="updateForm.invalid" class="btn btn-primary btn-block">UPDATE</button>
+        </li>
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+<!-- EDIT Company MODAL END-->
+<!-- Modal Errors-->
+<ng-template #errortemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Insurance Company</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalErr.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalError}}</p>
+    <ul class="list-group" *ngFor="let erro of errorList">
+      <li class="list-group-item">{{erro}}</li>
+    </ul>
+  </div>
+</ng-template>
+
+<!-- End Of Errors-->

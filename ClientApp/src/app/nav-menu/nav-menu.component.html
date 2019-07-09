@@ -17,6 +17,9 @@
         <li class="nav-item" *ngIf="!(LoginStatus$ | async) as LoginStatus">
           <a class="btn btn-primary" *ngIf="LoginStatus" [routerLink]='["/login"]'>Login</a>
         </li>
+        <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
+          <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/insurances"]'>Insurance Company</a>
+        </li>
         <li class="nav-item btn-group" *ngIf="(LoginStatus$ | async) as LoginStatus">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="(UserRole$ | async)=='Admin'">
             Doctor
@@ -43,6 +46,7 @@
             <a class="dropdown-item" *ngIf="LoginStatus" [routerLink]='["/home"]'> <img src="/icons/home.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Home</a>
             <a class="dropdown-item" *ngIf="LoginStatus"><img src="/icons/profile.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Profile</a>
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item" *ngIf="(UserRole$ | async)!='Admin'" [routerLink]='["/messages"]'><img src="/icons/contact-us.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Contact Us</a>
             <a class="dropdown-item" (click)="onLogout()" *ngIf="LoginStatus"><img src="/icons/logout.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Logout</a>
           </div>
         </li>

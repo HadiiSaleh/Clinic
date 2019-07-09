@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { map, shareReplay } from 'rxjs/operators';
+import { flatMap, first, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { InsuranceCompany } from '../interfaces/insurance-company';
 
@@ -16,19 +16,26 @@ export class InsuranceService {
   // Url to access our Web API’s
   private baseUrlRegister: string = "/api/insurance/AddInsurance_company";
   private baseUrlGetAll: string = "/api/insurance/GetInsurance_companiesAsync";
+  private updateUrl: string = "/api/insurance/UpdateInsurance_company";
+  private deleteUrl: string = "/api/insurance/DeleteInsurance_company";
+
   private InsuranceCompanies$: Observable<InsuranceCompany[]>;
 
-  // Register Method
+  // Insert the Company
+  insertCompany(newCompany: InsuranceCompany): Observable<InsuranceCompany> {
+    return this.http.post<InsuranceCompany>(this.baseUrlRegister, newCompany);
+  }
 
-  register(pat_fname: string, pat_mname: string, pat_lname: string, pat_gender: string, pat_username: string, pat_password: string, ConfirmPassword: string,
-    pat_phone: string, pat_blood_type: string, pat_email: string, pat_address: string, pat_birthday: Date, pat_picture: string, pat_insurance_company_name: string) {
-    return this.http.post<any>(this.baseUrlRegister, { pat_fname, pat_mname, pat_lname, pat_gender, pat_username, pat_password, ConfirmPassword, pat_phone, pat_blood_type, pat_email, pat_address, pat_birthday, pat_picture, pat_insurance_company_name }).pipe(map(result => {
-      //registration was successful
-      return result;
+  // Update the Company
 
-    }, error => {
-      return error;
-    }));
+  updateCompany(id: string, editCompany: InsuranceCompany): Observable<InsuranceCompany> {
+    return this.http.put<InsuranceCompany>(this.updateUrl +"/"+ id, editCompany);
+  }
+
+  // Delete Company
+
+  deleteCompany(id: string): Observable<any> {
+    return this.http.delete(this.deleteUrl + "/" + id);
   }
 
   //Get All Items Method
@@ -40,5 +47,15 @@ export class InsuranceService {
 
     // if companies cache exists return it
     return this.InsuranceCompanies$;
+  }
+
+  // Get Insurance company by its ID
+  getCompanyById(id: string): Observable<InsuranceCompany> {
+    return this.getAll().pipe(flatMap(result => result), first(insuranceCompany => insuranceCompany.cid == id));
+  }
+
+  // Clear Cache
+  clearCache() {
+    this.InsuranceCompanies$ = null;
   }
 }

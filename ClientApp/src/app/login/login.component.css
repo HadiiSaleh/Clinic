@@ -178,3 +178,31 @@ a {
 .btn-login:hover {
   background-color: #60DAFF;
 }
+.btn-primary {
+  color: white;
+  background-color: #FF5555;
+  border-color: #FF5555;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+}
+
+  .btn-primary.dropdown-toggle {
+    background-color: #FF5555;
+    border-color: #FF5555;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+  }
+
+  .btn-primary:hover {
+    background-color: #60DAFF;
+    color: white;
+    border-color: white;
+  }
+
+  .btn-primary:focus {
+    box-shadow: 0 0 0 3px #FF5555;
+  }
+
+  .btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px #FF5555;
+  }

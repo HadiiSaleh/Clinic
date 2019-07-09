@@ -1,3 +1,60 @@
-<p>
-  messages works!
-</p>
+<div class="brain">
+  <div class="container contact-form">
+    <div class="contact-image">
+      <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact" />
+    </div>
+    <form method="post" [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+      <h3>Drop Us a Message</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input id="Name" formControlName="Name" type="text" name="Name" class="form-control" placeholder="Your Name *" value="" />
+            <div *ngIf="Name.touched && Name.errors" class="errorMessage">
+              <span *ngIf="Name.hasError('required')">Name is required.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <input id="Email" formControlName="Email" type="text" name="Email" class="form-control" placeholder="Your Email *" value="" />
+            <div *ngIf="Email.touched && Email.errors" class="errorMessage">
+              <span *ngIf="Email.hasError('required')">Email is required.</span>
+              <span *ngIf="Email.hasError('email')">Invalid Email.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <input id="Subject" formControlName="Subject" type="text" name="Subject" class="form-control" placeholder="Subject *" value="" />
+            <div *ngIf="Subject.touched && Subject.errors" class="errorMessage">
+              <span *ngIf="Subject.hasError('required')">Subject is required.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="submit" [disabled]="insertForm.invalid" name="btnSubmit" class="btnContact" value="Send Message" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <textarea id="Message" formControlName="Message" name="Message" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
+            <div *ngIf="Message.touched && Message.errors" class="errorMessage">
+              <span *ngIf="Message.hasError('required')">Message is required.</span>
+              <span *ngIf="Message.hasError('maxlength')">Only 500 characters allowed for Message.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Sending Message</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalMessage}}</p>
+    <ul class="list-group" *ngFor="let erro of errorList">
+      <li class="list-group-item">{{erro}}</li>
+    </ul>
+  </div>
+</ng-template>

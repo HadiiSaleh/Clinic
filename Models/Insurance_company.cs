@@ -12,6 +12,7 @@ namespace Clinic.Models
     {
         [Required]
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ins_id { get; set; }
 
         [Required]

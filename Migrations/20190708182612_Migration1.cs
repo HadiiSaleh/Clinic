@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Clinic.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Migration1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,8 +16,7 @@ namespace Clinic.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     admin_fname = table.Column<string>(maxLength: 50, nullable: true),
                     admin_mname = table.Column<string>(maxLength: 50, nullable: true),
-                    admin_lname = table.Column<string>(maxLength: 50, nullable: true),
-                    admin_phone = table.Column<string>(maxLength: 15, nullable: false)
+                    admin_lname = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -69,16 +68,12 @@ namespace Clinic.Migrations
                 {
                     dr_id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    dr_userID = table.Column<int>(nullable: false),
+                    dr_user_id = table.Column<string>(nullable: false),
                     dr_fname = table.Column<string>(maxLength: 50, nullable: true),
                     dr_mname = table.Column<string>(maxLength: 50, nullable: true),
                     dr_lname = table.Column<string>(maxLength: 50, nullable: true),
                     dr_gender = table.Column<string>(maxLength: 10, nullable: true),
-                    dr_username = table.Column<string>(maxLength: 50, nullable: false),
-                    dr_password = table.Column<string>(maxLength: 300, nullable: false),
-                    dr_phone = table.Column<string>(maxLength: 15, nullable: false),
                     dr_speciality = table.Column<string>(maxLength: 100, nullable: true),
-                    dr_email = table.Column<string>(maxLength: 50, nullable: false),
                     dr_address = table.Column<string>(maxLength: 100, nullable: true),
                     dr_about = table.Column<string>(maxLength: 400, nullable: true)
                 },
@@ -91,10 +86,10 @@ namespace Clinic.Migrations
                 name: "Insurance_Companies",
                 columns: table => new
                 {
-                    ins_id = table.Column<int>(nullable: false),
+                    ins_id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ins_name = table.Column<string>(maxLength: 100, nullable: false),
-                    ins_userID = table.Column<int>(nullable: false),
-                    ins_phone = table.Column<string>(maxLength: 15, nullable: false),
+                    ins_user_id = table.Column<string>(nullable: false),
                     ins_address = table.Column<string>(maxLength: 100, nullable: true),
                     ins_fax = table.Column<string>(maxLength: 100, nullable: true)
                 },
@@ -110,7 +105,7 @@ namespace Clinic.Migrations
                 {
                     m_id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    m_sender_id = table.Column<int>(nullable: false),
+                    m_sender_id = table.Column<string>(nullable: false),
                     m_subject = table.Column<string>(nullable: false),
                     m_message = table.Column<string>(maxLength: 500, nullable: false),
                     m_date = table.Column<DateTime>(nullable: false)
@@ -198,6 +193,20 @@ namespace Clinic.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_reminder_Patients", x => x.reminder_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResetPasswordViewModel",
+                columns: table => new
+                {
+                    id = table.Column<string>(nullable: false),
+                    code = table.Column<string>(nullable: true),
+                    password = table.Column<string>(maxLength: 100, nullable: true),
+                    ConfirmPassword = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResetPasswordViewModel", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,11 +321,10 @@ namespace Clinic.Migrations
                 {
                     as_id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    as_userID = table.Column<int>(nullable: false),
+                    as_user_id = table.Column<string>(nullable: false),
                     as_fname = table.Column<string>(maxLength: 50, nullable: true),
                     as_mname = table.Column<string>(maxLength: 50, nullable: true),
                     as_lname = table.Column<string>(maxLength: 50, nullable: true),
-                    as_phone = table.Column<string>(maxLength: 15, nullable: false),
                     as_dr_id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -336,12 +344,11 @@ namespace Clinic.Migrations
                 {
                     pat_id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    pat_userID = table.Column<int>(nullable: false),
+                    pat_user_id = table.Column<string>(nullable: false),
                     pat_fname = table.Column<string>(maxLength: 50, nullable: true),
                     pat_mname = table.Column<string>(maxLength: 50, nullable: true),
                     pat_lname = table.Column<string>(maxLength: 50, nullable: true),
                     pat_gender = table.Column<string>(maxLength: 10, nullable: true),
-                    pat_phone = table.Column<string>(maxLength: 15, nullable: false),
                     pat_address = table.Column<string>(maxLength: 100, nullable: true),
                     pat_birthday = table.Column<DateTime>(type: "date", nullable: true),
                     pat_blood_type = table.Column<string>(maxLength: 4, nullable: true),
@@ -370,12 +377,12 @@ namespace Clinic.Migrations
                     cons_title = table.Column<string>(maxLength: 100, nullable: true),
                     cons_type = table.Column<string>(maxLength: 50, nullable: true),
                     cons_date = table.Column<DateTime>(nullable: false),
-                    cons_symptoms = table.Column<string>(maxLength: 500, nullable: true),
+                    cons_symptoms = table.Column<string>(maxLength: 500, nullable: false),
                     cons_diagnosis = table.Column<string>(maxLength: 500, nullable: true),
                     cons_temp = table.Column<string>(maxLength: 5, nullable: true),
                     cons_blood_pressure = table.Column<string>(maxLength: 5, nullable: true),
                     cons_cost = table.Column<int>(nullable: false),
-                    cons_treatment = table.Column<int>(maxLength: 500, nullable: false),
+                    cons_treatment = table.Column<string>(maxLength: 500, nullable: true),
                     cons_insurance_confirmation = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -429,7 +436,7 @@ namespace Clinic.Migrations
                     report_id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     report_cons_id = table.Column<int>(nullable: false),
-                    report_ins_id = table.Column<int>(nullable: false),
+                    report_ins_name = table.Column<string>(nullable: false),
                     Consultationcons_id = table.Column<int>(nullable: true),
                     Insurance_companyins_id = table.Column<int>(nullable: true),
                     Insurance_companyins_name = table.Column<string>(nullable: true)
@@ -589,6 +596,9 @@ namespace Clinic.Migrations
 
             migrationBuilder.DropTable(
                 name: "Reports");
+
+            migrationBuilder.DropTable(
+                name: "ResetPasswordViewModel");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

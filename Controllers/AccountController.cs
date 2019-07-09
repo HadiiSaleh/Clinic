@@ -187,5 +187,85 @@ namespace Clinic.Controllers
                 return new JsonResult(errors);
             }
         }
-    }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([FromBody]ForgotPasswordEmail brain)
+        {
+            string email = brain.email;
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if( user != null)
+            {
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var callbackUrl = Url.Action("ResetPasswordEmail", "Account", new { UserId = user.Id, Code = code }, protocol: HttpContext.Request.Scheme);
+
+                await _emailsender.SendEmailAsync(user.Email, "MyClinic.com - Reset Your Password", "Please reset your password by clicking this link: <a href=\"" + callbackUrl + "\">click here</a>");
+
+                return Ok(new { username = user.UserName, email = user.Email, status = 1, message = "Reset Password Email Was Sent To "+email+" !" });
+            }
+
+            return new JsonResult("Email Does Not Exists!");
+        }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPasswordEmail(string userId, string code)
+        {
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
+            {
+                ModelState.AddModelError("", "User Id and Code are required");
+                return BadRequest(ModelState);
+
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return new JsonResult("User Invalid");
+            }
+
+            ResetPasswordViewModel brain = new ResetPasswordViewModel(userId,code,"","");
+
+            ViewData.Model = brain;
+
+            return View("Views/Notifications/ResetPassword.cshtml");
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel toto)
+        {
+            //ResetPasswordViewModel toto = new ResetPasswordViewModel(id,code,password,ConfirmPassword);
+            if (ModelState.IsValid)
+            {
+                if (toto == null) return new JsonResult("Bad input");
+
+                var user = await _userManager.FindByIdAsync(toto.id);
+
+                var result = await _userManager.ResetPasswordAsync(user, toto.code, toto.password);
+
+                if (result.Succeeded)
+                {
+
+                    return RedirectToAction("PassReset", "Notifications", new { toto.id, toto.code });
+
+                }
+                else
+                {
+                    List<string> errors = new List<string>();
+                    foreach (var error in result.Errors)
+                    {
+                        errors.Add(error.ToString());
+                    }
+                    return new JsonResult(errors);
+                }
+            }
+
+            return new JsonResult("Bad input");
+        }
+    }   
 }

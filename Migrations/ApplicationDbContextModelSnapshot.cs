@@ -171,7 +171,9 @@ namespace Clinic.Migrations
 
             modelBuilder.Entity("Clinic.Models.Insurance_company", b =>
                 {
-                    b.Property<int>("ins_id");
+                    b.Property<int>("ins_id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ins_name")
                         .HasMaxLength(100);
@@ -396,6 +398,23 @@ namespace Clinic.Migrations
                     b.HasIndex("Insurance_companyins_id", "Insurance_companyins_name");
 
                     b.ToTable("Reports");
+                });
+
+            modelBuilder.Entity("Clinic.Models.ResetPasswordViewModel", b =>
+                {
+                    b.Property<string>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConfirmPassword");
+
+                    b.Property<string>("code");
+
+                    b.Property<string>("password")
+                        .HasMaxLength(100);
+
+                    b.HasKey("id");
+
+                    b.ToTable("ResetPasswordViewModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -51,7 +51,11 @@ namespace Clinic.Controllers
                 return BadRequest(ModelState);
             }
 
+            //here we will hold all the errors of registration
+            List<string> errorList = new List<string>();
+
             var m_sender = await _userManager.FindByEmailAsync(messageModel.Email);
+
             if (m_sender != null)
             {
                 var newMessage = new Message
@@ -64,13 +68,30 @@ namespace Clinic.Controllers
 
                 var addMessage = await _db.Messages.AddAsync(newMessage);
 
-                if (addMessage == null) return BadRequest(new JsonResult("Can't add this Message"));
+                if (addMessage != null)
+                {
+                    await _db.SaveChangesAsync();
 
-                await _db.SaveChangesAsync();
+                    return Ok(new { messageId = newMessage.m_id, SenderId = newMessage.m_sender_id, status = 1, message = "Message Added Successfuly" });
+                }
 
-                return Ok(new { messageId = newMessage.m_id, SenderId = newMessage.m_sender_id, status = 1, message = "Message Added Successfuly" });
+                else
+                {
+                    errorList.Add("Can't add this Message");
+                }
             }
-            else return BadRequest(new JsonResult("Email Not Found!")); 
+
+            else
+            {
+                errorList.Add("Email '"+ messageModel.Email+ "' not Found!");
+
+                foreach (var error in errorList)
+                {
+                    ModelState.AddModelError("", error);
+                }
+            }
+
+            return BadRequest(new JsonResult(errorList));
         }
 
         [HttpDelete("[action]/{id}")]

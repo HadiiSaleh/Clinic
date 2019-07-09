@@ -45,6 +45,7 @@ namespace Clinic.Controllers
                     var findUser = await _userManager.FindByIdAsync(ins.ins_user_id);
 
                     Insurance_companyModel insModel = new Insurance_companyModel();
+                    insModel.cid = ins.ins_user_id;
                     insModel.ins_name = ins.ins_name;
                     insModel.ins_address = ins.ins_address;
                     insModel.ins_fax = ins.ins_fax;
@@ -72,6 +73,7 @@ namespace Clinic.Controllers
             if (findInsurance_company != null && findUser != null)
             {
                 Insurance_companyModel insurance_company = new Insurance_companyModel();
+                insurance_company.cid = findInsurance_company.ins_user_id;
                 insurance_company.ins_name = findInsurance_company.ins_name;
                 insurance_company.ins_address = findInsurance_company.ins_address;
                 insurance_company.ins_fax = findInsurance_company.ins_fax;
@@ -129,6 +131,7 @@ namespace Clinic.Controllers
                         ins_fax = insurance_company.ins_fax,
                         ins_address = insurance_company.ins_address
                     };
+            
 
                     var addInsurance_company = await _db.Insurance_Companies.AddAsync(newInsurance_company);
                     if (addInsurance_company != null)
@@ -160,7 +163,11 @@ namespace Clinic.Controllers
                 return BadRequest(ModelState);
             }
 
+            //here we will hold all the errors of registration
+            List<string> errorList = new List<string>();
+
             var findInsurance_company = _db.Insurance_Companies.FirstOrDefault(d => d.ins_user_id == id);
+            
 
             var findUser = await _userManager.FindByIdAsync(id);
 
@@ -174,7 +181,7 @@ namespace Clinic.Controllers
             findInsurance_company.ins_fax = insurance_company.ins_fax;
             findInsurance_company.ins_address = insurance_company.ins_address;
 
-            _db.Entry(findInsurance_company).State = EntityState.Modified;
+            var updateCompany = _db.Entry(findInsurance_company).State = EntityState.Modified;
 
             var username = await _userManager.SetUserNameAsync(findUser, insurance_company.ins_username);
             var email = await _userManager.SetEmailAsync(findUser, insurance_company.ins_email);
@@ -182,10 +189,23 @@ namespace Clinic.Controllers
 
             var updateUser = await _userManager.UpdateAsync(findUser);
 
-            await _db.SaveChangesAsync();
+            if (updateUser.Succeeded)
+            {
+                await _db.SaveChangesAsync();
 
-            return Ok(new JsonResult("The Insurance_company with id " + id + " and name " + findInsurance_company.ins_name + " is updated"));
+                return Ok(new JsonResult("The Insurance_company with id " + id + " and name " + findInsurance_company.ins_name + " is updated"));
+            }
 
+            else
+            {
+                foreach (var error in updateUser.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                    errorList.Add(error.Description);
+                }
+            }
+
+            return BadRequest(new JsonResult(errorList));
         }
 
         [HttpDelete("[action]/{id}")]
@@ -197,6 +217,10 @@ namespace Clinic.Controllers
                 return BadRequest(ModelState);
             }
 
+            var findInsurance_company = _db.Insurance_Companies.FirstOrDefault(d => d.ins_user_id == id);
+
+            if (findInsurance_company != null)
+            {
             //find insurance_company's account
             var finduser = await _userManager.FindByIdAsync(id);
             //delete insurance_company's account
@@ -204,15 +228,10 @@ namespace Clinic.Controllers
 
             if (deleteuser.Succeeded)
             {
-                //find insurance_company
-                var findInsurance_company = _db.Insurance_Companies.FirstOrDefault(d => d.ins_user_id == id);
+                  _db.Insurance_Companies.Remove(findInsurance_company);
 
-                if (findInsurance_company != null)
-                {
-                    _db.Insurance_Companies.Remove(findInsurance_company);
-
-                    await _db.SaveChangesAsync();
-                }
+                  await _db.SaveChangesAsync();
+            }
 
                 return Ok(new JsonResult("The Insurance_company with username " + finduser.UserName + " is Deleted"));
             }

@@ -60,5 +60,6 @@ namespace Clinic.Data
         public DbSet<Reminder_doctor> reminder_Doctors { get; set; }
         public DbSet<Reminder_patient> reminder_Patients { get; set; }
         public DbSet<Reminder_insurance> Reminder_Insurances { get; set; }
+        public DbSet<Clinic.Models.ResetPasswordViewModel> ResetPasswordViewModel { get; set; }
     }
 }

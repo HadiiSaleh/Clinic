@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-//import * as jwt_decode from "jwt-decode";
-//import { decode } from 'punycode';
+import * as jwt_decode from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +15,8 @@ export class LoginService {
 
   // Url to access our Web API’s
   private baseUrlLogin: string = "/api/account/login";
+
+  private baseUrlForgotPassword: string = "/api/account/forgotpassword";
 
   // User related properties
   private loginStatus = new BehaviorSubject<boolean>(this.checkLoginStatus());
@@ -69,40 +70,48 @@ export class LoginService {
 
   checkLoginStatus(): boolean {
 
-    //var loginCookie = localStorage.getItem("loginStatus");
+    var loginCookie = localStorage.getItem("loginStatus");
 
-    //if (loginCookie == "1") {
-    //  if (localStorage.getItem('jwt') === null || localStorage.getItem('jwt') === undefined) {
-    //    return false;
-    //  }
+    if (loginCookie == "1") {
+      if (localStorage.getItem('jwt') === null || localStorage.getItem('jwt') === undefined) {
+        return false;
+      }
 
-    //  // Get and Decode the Token
-    //  const token = localStorage.getItem('jwt');
-    //  const decoded = jwt_decode(token);
-    //  // Check if the cookie is valid
+      // Get and Decode the Token
+      const token = localStorage.getItem('jwt');
+      const decoded = jwt_decode(token);
+      // Check if the cookie is valid
 
-    //  if (decoded.exp === undefined) {
-    //    return false;
-    //  }
+      if (decoded.exp === undefined) {
+        return false;
+      }
 
-    //  // Get Current Date Time
-    //  const date = new Date(0);
+      // Get Current Date Time
+      const date = new Date(0);
 
-    //  // Convert EXp Time to UTC
-    //  let tokenExpDate = date.setUTCSeconds(decoded.exp);
+      // Convert EXp Time to UTC
+      let tokenExpDate = date.setUTCSeconds(decoded.exp);
 
-    //  // If Value of Token time greter than 
+      // If Value of Token time greter than 
 
-    //  if (tokenExpDate.valueOf() > new Date().valueOf()) {
-    //    return true;
-    //  }
+      if (tokenExpDate.valueOf() > new Date().valueOf()) {
+        return true;
+      }
 
-    //  console.log("NEW DATE " + new Date().valueOf());
-    //  console.log("Token DATE " + tokenExpDate.valueOf());
+      console.log("NEW DATE " + new Date().valueOf());
+      console.log("Token DATE " + tokenExpDate.valueOf());
 
-    //  return false;
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('username');
+      localStorage.removeItem('expiration');
+      localStorage.setItem('loginStatus', '0');
+      this.router.navigate(['/login']);
+      console.log("Logged Out Successfully");
 
-    //}
+      return false;
+
+    }
     return false;
   }
 
@@ -118,4 +127,8 @@ export class LoginService {
     return this.UserRole.asObservable();
   }
 
+  //forgot Password
+  forgotPasswrod(email: string) {
+    return this.http.post<any>(this.baseUrlForgotPassword, { email});
+  }
 }
