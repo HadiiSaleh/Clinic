@@ -181,7 +181,7 @@ namespace Clinic.Controllers
             findInsurance_company.ins_fax = insurance_company.ins_fax;
             findInsurance_company.ins_address = insurance_company.ins_address;
 
-            var updateCompany = _db.Entry(findInsurance_company).State = EntityState.Modified;
+            _db.Entry(findInsurance_company).State = EntityState.Modified;
 
             var username = await _userManager.SetUserNameAsync(findUser, insurance_company.ins_username);
             var email = await _userManager.SetEmailAsync(findUser, insurance_company.ins_email);

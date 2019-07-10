@@ -9,11 +9,8 @@ import { HomeComponent } from './home/home.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
-import { DoctorRegisterComponent } from './doctors/doctor-register/doctor-register.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PatientRegisterComponent } from './patients/patient-register/patient-register.component';
 import { JwtInterceptor } from './_helper/jwt.Interceptor';
-import { DoctorListComponent } from './doctors/doctor-list/doctor-list.component';
 import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
@@ -24,9 +21,6 @@ import { DataTablesModule } from 'angular-datatables';
     MessagesComponent,
     HomeComponent,
     ForgetPasswordComponent,
-    DoctorRegisterComponent,
-    PatientRegisterComponent,
-    DoctorListComponent,
   ],
   imports: [
     BrowserModule,

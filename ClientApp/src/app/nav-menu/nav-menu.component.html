@@ -20,23 +20,14 @@
         <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
           <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/insurances"]'>Insurance Company</a>
         </li>
-        <li class="nav-item btn-group" *ngIf="(LoginStatus$ | async) as LoginStatus">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="(UserRole$ | async)=='Admin'">
-            Doctor
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" *ngIf="LoginStatus" [routerLink]='["/doctor/register"]'> Register</a>
-            <a class="dropdown-item" *ngIf="LoginStatus">Update</a>
-          </div>
+        <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
+          <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/patients"]'>Patient</a>
         </li>
-        <li class="nav-item btn-group" *ngIf="(LoginStatus$ | async) as LoginStatus">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="(UserRole$ | async)=='Admin'">
-            Patient
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" *ngIf="LoginStatus" [routerLink]='["/patient/register"]'> Register</a>
-            <a class="dropdown-item" *ngIf="LoginStatus">Update</a>
-          </div>
+        <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
+          <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/assistants"]'>Assistant</a>
+        </li>
+        <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
+          <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/doctors"]'>Doctor</a>
         </li>
         <li class="nav-item btn-group" *ngIf="(LoginStatus$ | async) as LoginStatus">
           <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="(UserName$ | async) as UserName">

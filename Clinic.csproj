@@ -27,16 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\interfaces\assistant.ts" />
+    <None Remove="ClientApp\src\app\interfaces\doctor.ts" />
+    <None Remove="ClientApp\src\app\interfaces\patient.ts" />
     <None Remove="ClientApp\src\app\_helper\jwt.Interceptor.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\guards\" />
-    <Folder Include="ClientApp\src\app\interfaces\" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\assistant.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\doctor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\patient.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_helper\jwt.Interceptor.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\_helper\jwt.Interceptor.ts" />
+    <Folder Include="ClientApp\src\app\guards\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

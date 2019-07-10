@@ -8,6 +8,8 @@ namespace Clinic.Models
 {
     public class AssistantModel
     {
+        public string as_user_id { get; set; }
+
         [StringLength(50, ErrorMessage = "Maximum length is {1}")]
         [RegularExpression("^[A-Za-z]+$")]
         public String as_fname { get; set; }

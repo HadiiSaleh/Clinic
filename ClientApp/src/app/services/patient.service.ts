@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { flatMap, first, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Patient } from '../interfaces/patient';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +13,48 @@ export class PatientService {
   constructor(private http: HttpClient, private router: Router) { }
 
   // Url to access our Web API’s
-  private baseUrlRegister: string = "/api/patients/addpatient";
+  private baseUrlRegister: string = "/api/patients/AddPatient";
+  private baseUrlGetAll: string = "/api/patients/GetPatientsAsync";
+  private updateUrl: string = "/api/patients/UpdatePatient";
+  private deleteUrl: string = "/api/patients/DeletePatient";
 
-  // Register Method
-  register(pat_fname: string, pat_mname: string, pat_lname: string, pat_gender: string, pat_username: string, pat_password: string, ConfirmPassword: string,
-    pat_phone: string, pat_blood_type: string, pat_email: string, pat_address: string, pat_birthday: Date, pat_picture: string, pat_insurance_company_name: string) {
-    return this.http.post<any>(this.baseUrlRegister, { pat_fname, pat_mname, pat_lname, pat_gender, pat_username, pat_password, ConfirmPassword, pat_phone, pat_blood_type, pat_email, pat_address, pat_birthday, pat_picture, pat_insurance_company_name }).pipe(map(result => {
-      //registration was successful
-      return result;
+  private Patients$: Observable<Patient[]>;
 
-    }, error => {
-      return error;
-    }));
+  // Insert the Patient
+  insertPatient(newPatient: Patient): Observable<Patient> {
+    return this.http.post<Patient>(this.baseUrlRegister, newPatient);
+  }
+
+  // Update the Patient
+
+  updatePatient(id: string, editPatient: Patient): Observable<Patient> {
+    return this.http.put<Patient>(this.updateUrl + "/" + id, editPatient);
+  }
+
+  // Delete Patient
+
+  deletePatient(id: string): Observable<any> {
+    return this.http.delete(this.deleteUrl + "/" + id);
+  }
+
+  //Get All Items Method
+
+  getAll(): Observable<Patient[]> {
+    if (!this.Patients$) {
+      this.Patients$ = this.http.get<Patient[]>(this.baseUrlGetAll).pipe(shareReplay());
+    }
+
+    // if Patient cache exists return it
+    return this.Patients$;
+  }
+
+  // Get Patient its ID
+  getPatientById(id: string): Observable<Patient> {
+    return this.getAll().pipe(flatMap(result => result), first(patient => patient.pat_user_id == id));
+  }
+
+  // Clear Cache
+  clearCache() {
+    this.Patients$ = null;
   }
 }

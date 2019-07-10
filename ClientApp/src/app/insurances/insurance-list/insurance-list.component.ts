@@ -135,8 +135,8 @@ export class InsuranceListComponent implements OnInit, OnDestroy {
 
   // Update an Existing Comany
   onUpdate() {
-    let editProduct = this.updateForm.value;
-    this.insuranceService.updateCompany(editProduct.cid, editProduct).subscribe(
+    let editInsurance = this.updateForm.value;
+    this.insuranceService.updateCompany(editInsurance.cid, editInsurance).subscribe(
       result => {
         this.errorList = [];
         console.log('Company Updated');

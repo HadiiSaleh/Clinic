@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { flatMap, first, shareReplay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Doctor } from '../interfaces/doctor';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +14,47 @@ export class DoctorService {
 
   // Url to access our Web API’s
   private baseUrlRegister: string = "/api/doctors/adddoctor";
+  private baseUrlGetAll: string = "/api/doctors/GetDoctorsAsync";
+  private updateUrl: string = "/api/doctors/UpdateDoctor";
+  private deleteUrl: string = "/api/doctors/DeleteDoctor";
 
-  // Register Method
-  register(dr_fname: string, dr_mname: string, dr_lname: string, dr_gender: string, dr_username: string, dr_password: string, ConfirmPassword: string,
-    dr_phone: string, dr_speciality: string, dr_email: string, dr_address: string, dr_about: string) {
-    return this.http.post<any>(this.baseUrlRegister, { dr_fname, dr_mname, dr_lname, dr_gender, dr_username, dr_password, ConfirmPassword, dr_phone, dr_speciality, dr_email, dr_address, dr_about }).pipe(map(result => {
-      //registration was successful
-      return result;
+  private Doctors$: Observable<Doctor[]>;
 
-    }, error => {
-      return error;
-    }));
+  // Insert the Doctor
+  insertDoctor(newDoctor: Doctor): Observable<Doctor> {
+    return this.http.post<Doctor>(this.baseUrlRegister, newDoctor);
+  }
+
+  // Update the Doctor
+
+  updateDoctor(id: string, editDoctor: Doctor): Observable<Doctor> {
+    return this.http.put<Doctor>(this.updateUrl + "/" + id, editDoctor);
+  }
+
+  // Delete Doctor
+
+  deleteDoctor(id: string): Observable<any> {
+    return this.http.delete(this.deleteUrl + "/" + id);
+  }
+
+  //Get All Items Method
+
+  getAll(): Observable<Doctor[]> {
+    if (!this.Doctors$) {
+      this.Doctors$ = this.http.get<Doctor[]>(this.baseUrlGetAll).pipe(shareReplay());
+    }
+
+    // if Doctor cache exists return it
+    return this.Doctors$;
+  }
+
+  // Get Doctor its ID
+  getDoctorById(id: string): Observable<Doctor> {
+    return this.getAll().pipe(flatMap(result => result), first(doctor => doctor.dr_user_id == id));
+  }
+
+  // Clear Cache
+  clearCache() {
+    this.Doctors$ = null;
   }
 }

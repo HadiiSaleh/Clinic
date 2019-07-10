@@ -36,7 +36,7 @@ namespace Clinic.Controllers
         {
             var findAdmin = _db.Admins.FirstOrDefault(a => a.admin_id == 1);
             
-            var findUser = await _userManager.FindByIdAsync("faf0609b-0764-48eb-a475-53bb4b17d5fe");
+            var findUser = await _userManager.FindByIdAsync("35b94237-2c02-4f7a-8f63-f720a762dca6");
 
             if (findAdmin != null && findUser != null)
             {
@@ -131,7 +131,7 @@ namespace Clinic.Controllers
 
             var findAdmin = _db.Admins.FirstOrDefault(a => a.admin_id == 1);
 
-            var findUser = await _userManager.FindByIdAsync("faf0609b-0764-48eb-a475-53bb4b17d5fe");
+            var findUser = await _userManager.FindByIdAsync("35b94237-2c02-4f7a-8f63-f720a762dca6");
 
             if (findAdmin == null && findUser == null)
             {

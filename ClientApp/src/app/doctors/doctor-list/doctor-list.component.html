@@ -1,3 +1,389 @@
-<p>
-  doctor-list works!
-</p>
+<div class="container-fluid">
+
+  <button class="btn btn-warning mb-3 float-right text-uppercase" *ngIf="userRoleStatus == 'Admin'" (click)="onAddDoctor()"><i class="fa fa-plus"></i> Add Doctor</button>
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border hover" style="width:100%">
+    <thead class="text-center thead-dark">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Speciality</th>
+        <th>Gender</th>
+        <th>Username</th>
+        <th>email</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <th>About</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doctor of doctors" class="text-center">
+        <td>{{doctor.dr_user_id}}</td>
+        <td>{{doctor.dr_name | uppercase}}</td>
+        <td>{{doctor.dr_speciality}}</td>
+        <td>{{doctor.dr_gender}}</td>
+        <td>{{doctor.dr_username}}</td>
+        <td>{{doctor.dr_email}}</td>
+        <td>{{doctor.dr_phone}}</td>
+        <td>{{doctor.dr_address}}</td>
+        <td>{{doctor.dr_about}}</td>
+        <td>
+          <div class="btn-group mt-2" role="group">
+            <button type="button" class="btn btn-success" (click)="onSelect(doctor)"><i class="fas fa-list"></i></button>
+            <button type="button" class="btn btn-primary" *ngIf="userRoleStatus == 'Admin'" (click)="onUpdateModal(doctor)"><i class="fas fa-edit"></i></button>
+            <button type="button" class="btn btn-danger" *ngIf="userRoleStatus == 'Admin'" (click)="onDelete(doctor)"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ADD Doctor MODAL START-->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title">ADD NEW DOCTOR</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorFName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="dr_fname" formControlName="dr_fname" class="form-control" placeholder="first name - Max 100 Characters " aria-label="First Name" aria-describedby="DoctorFName">
+          </div>
+          <div class="errorMessage" *ngIf="dr_fname.touched && dr_fname.errors">
+            <span *ngIf="dr_fname.hasError('required')">Doctor First Name is required.</span>
+            <span *ngIf="dr_fname.hasError('pattern')">Only characters allowed for Doctor First Name.</span>
+            <span *ngIf="dr_fname.hasError('maxlength')">Only 100 characters allowed for Doctor First Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorMName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="dr_mname" formControlName="dr_mname" class="form-control" placeholder="midle name - Max 100 Characters " aria-label="Midle Name" aria-describedby="DoctorMName">
+          </div>
+          <div class="errorMessage" *ngIf="dr_mname.touched && dr_mname.errors">
+            <span *ngIf="dr_mname.hasError('required')">Doctor Midle Name is required.</span>
+            <span *ngIf="dr_mname.hasError('pattern')">Only characters allowed for Doctor Midle Name.</span>
+            <span *ngIf="dr_mname.hasError('maxlength')">Only 100 characters allowed for Doctor Midle Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorLName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="dr_lname" formControlName="dr_lname" class="form-control" placeholder="last name - Max 100 Characters " aria-label="Last Name" aria-describedby="DoctorLName">
+          </div>
+          <div class="errorMessage" *ngIf="dr_lname.touched && dr_lname.errors">
+            <span *ngIf="dr_lname.hasError('required')">Doctor Last Name is required.</span>
+            <span *ngIf="dr_lname.hasError('pattern')">Only characters allowed for Doctor Last Name.</span>
+            <span *ngIf="dr_lname.hasError('maxlength')">Only 100 characters allowed for Doctor Last Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorUsername"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_username" class="form-control" placeholder="Username - Max 50 Characters" aria-label="Username" aria-describedby="DoctorUsername">
+          </div>
+          <div *ngIf="dr_username.touched && dr_username.errors" class="errorMessage">
+            <span *ngIf="dr_username.hasError('required')">UserName is required.</span>
+            <span *ngIf="dr_username.hasError('maxlength')">Only 50 characters allowed for UserName.</span>
+           </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Password"><i class="fas fa-lock"></i></span>
+            </div>
+            <input type="password" formControlName="dr_password" class="form-control" placeholder="Password - Max 100 Characters" aria-label="Password" aria-describedby="Password">
+          </div>
+          <div *ngIf="dr_password.touched && dr_password.errors" class="errorMessage">
+            <span *ngIf="dr_password.hasError('required')">Password is required.</span>
+            <span *ngIf="dr_password.hasError('maxlength')">Only 50 characters allowed for password.</span>
+            <span *ngIf="dr_password.hasError('minlength')">Atleast 6 characters needed for password.</span>
+            <span *ngIf="dr_password.hasError('pattern')">Required 1 uppercase, 1 lowercase, 1 digit, 1 non-alphanumerical.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="ConfirmPassword"><i class="fas fa-lock"></i></span>
+            </div>
+            <input type="password" formControlName="ConfirmPassword" class="form-control" placeholder="Confirm Password - Max 100 Characters" aria-label="ConfirmPassword" aria-describedby="ConfirmPassword">
+          </div>
+          <div *ngIf="ConfirmPassword.touched && ConfirmPassword.errors" class="errorMessage">
+            <span *ngIf="ConfirmPassword.hasError('required')">Confirm Password is required.</span>
+            <span *ngIf="ConfirmPassword.hasError('mustMatch')">Password Must Match.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorEmail"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_email" class="form-control" placeholder="eg:hadiisaleh@outlook.com - Max 256 Characters" aria-label="Email" aria-describedby="DoctorEmail">
+          </div>
+          <div *ngIf="dr_email.touched && dr_email.errors" class="errorMessage">
+            <span *ngIf="dr_email.hasError('required')">Email is required.</span>
+            <span *ngIf="dr_email.hasError('email')">Please provide valid email.</span>
+            <span *ngIf="_dr_email.hasError('maxlength')">Only 256 characters allowed for Email.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorPhone"><i class="fas fa-phone-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_phone" class="form-control" placeholder="eg:+961 03051763 - Max 100 Characters" aria-label="Phone" aria-describedby="DoctorPhone">
+          </div>
+          <div *ngIf="dr_phone.touched && dr_phone.errors" class="errorMessage">
+            <span *ngIf="dr_phone.hasError('required')">PhoneNumber is required.</span>
+            <span *ngIf="dr_phone.hasError('pattern')">Please provide valid phone number.</span>
+            <span *ngIf="_dr_phone.hasError('maxlength')">Only 100 characters allowed for Phone.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <input type="radio" name="dr_gender" formControlName="dr_gender" value="male" checked> Male
+            <input type="radio" name="dr_gender" formControlName="dr_gender" value="female"> Female
+          </div>
+          <div *ngIf="dr_gender.touched && dr_gender.errors" class="errorMessage">
+            <span *ngIf="dr_gender.hasError('required')">Gender is required.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorSpecs"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input id="dr_speciality" formControlName="dr_speciality" type="text" class="form-control" placeholder="Speciality - Max 100 Characters" aria-label="Soeciality" aria-describedby="DoctorSpecs">
+          </div>
+          <div *ngIf="dr_speciality.touched && dr_speciality.errors" class="errorMessage">
+            <span *ngIf="dr_speciality.hasError('required')">Speciality is required.</span>
+            <span *ngIf="dr_speciality.hasError('maxlength')">Only 100 characters allowed for Speciality.</span>
+            <span *ngIf="dr_speciality.hasError('minlength')">Atleast 5 characters needed for Speciality.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorAddress"><i class="fas fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_address" class="form-control" placeholder="Address - Max 100 Characters" aria-label="Address" aria-describedby="DoctorAddress">
+          </div>
+          <div *ngIf="dr_address.touched && dr_address.errors" class="errorMessage">
+            <span *ngIf="dr_address.hasError('required')">Address is required.</span>
+            <span *ngIf="dr_address.hasError('maxlength')">Only 100 characters allowed for Address.</span>
+            <span *ngIf="dr_address.hasError('minlength')">Atleast 5 characters needed for Address.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorAbout"><i class="fas fa-info-square"></i></span>
+            </div>
+            <textarea id="dr_about" formControlName="dr_about" type="text" class="form-control" placeholder="About" aria-label="About" aria-describedby="DoctorAbout"></textarea>
+          </div>
+          <div *ngIf="dr_about.touched && dr_about.errors" class="errorMessage">
+            <span *ngIf="dr_about.hasError('required')">About is required.</span>
+            <span *ngIf="dr_about.hasError('maxlength')">Only 400 characters allowed for About.</span>
+            <span *ngIf="dr_about.hasError('minlength')">Atleast 5 characters needed for About.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <button [disabled]="insertForm.invalid" class="btn btn-primary btn-block">ADD</button>
+        </li>
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+<!-- ADD Doctor MODAL START-->
+<!-- EDIT Doctor MODAL START-->
+
+<ng-template #editTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">EDIT DOCTOR DETAILS</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Id"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" disabled id="dr_user_id" formControlName="dr_user_id" class="form-control" placeholder="Id " aria-label="Id" aria-describedby="Id">
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorFName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="dr_fname" formControlName="dr_fname" class="form-control" placeholder="first name - Max 100 Characters " aria-label="First Name" aria-describedby="DoctorFName">
+          </div>
+          <div class="errorMessage" *ngIf="dr_fname.touched && dr_fname.errors">
+            <span *ngIf="_dr_fname.hasError('required')">Doctor First Name is required.</span>
+            <span *ngIf="_dr_fname.hasError('pattern')">Only characters allowed for Doctor First Name.</span>
+            <span *ngIf="_dr_fname.hasError('maxlength')">Only 100 characters allowed for Doctor First Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorMName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="dr_mname" formControlName="dr_mname" class="form-control" placeholder="midle name - Max 100 Characters " aria-label="Midle Name" aria-describedby="DoctorMName">
+          </div>
+          <div class="errorMessage" *ngIf="dr_mname.touched && dr_mname.errors">
+            <span *ngIf="_dr_mname.hasError('required')">Doctor Midle Name is required.</span>
+            <span *ngIf="_dr_mname.hasError('pattern')">Only characters allowed for Doctor Midle Name.</span>
+            <span *ngIf="_dr_mname.hasError('maxlength')">Only 100 characters allowed for Doctor Midle Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorLName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" id="dr_lname" formControlName="dr_lname" class="form-control" placeholder="last name - Max 100 Characters " aria-label="Last Name" aria-describedby="DoctorLName">
+          </div>
+          <div class="errorMessage" *ngIf="dr_lname.touched && dr_lname.errors">
+            <span *ngIf="_dr_lname.hasError('required')">Doctor Last Name is required.</span>
+            <span *ngIf="_dr_lname.hasError('pattern')">Only characters allowed for Doctor Last Name.</span>
+            <span *ngIf="_dr_lname.hasError('maxlength')">Only 100 characters allowed for Doctor Last Name.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorUsername"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_username" class="form-control" placeholder="Username - Max 50 Characters" aria-label="Username" aria-describedby="DoctorUsername">
+          </div>
+          <div *ngIf="dr_username.touched && dr_username.errors" class="errorMessage">
+            <span *ngIf="_dr_username.hasError('required')">UserName is required.</span>
+            <span *ngIf="_dr_username.hasError('maxlength')">Only 50 characters allowed for UserName.</span>
+            </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorEmail"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_email" class="form-control" placeholder="eg:hadiisaleh@outlook.com - Max 256 Characters" aria-label="Email" aria-describedby="DoctorEmail">
+          </div>
+          <div *ngIf="dr_email.touched && dr_email.errors" class="errorMessage">
+            <span *ngIf="_dr_email.hasError('required')">Email is required.</span>
+            <span *ngIf="_dr_email.hasError('email')">Please provide valid email.</span>
+            <span *ngIf="_dr_email.hasError('maxlength')">Only 256 characters allowed for Email.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorPhone"><i class="fas fa-phone-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_phone" class="form-control" placeholder="eg:+961 03051763 - Max 100 Characters" aria-label="Phone" aria-describedby="DoctorPhone">
+          </div>
+          <div *ngIf="dr_phone.touched && dr_phone.errors" class="errorMessage">
+            <span *ngIf="_dr_phone.hasError('required')">PhoneNumber is required.</span>
+            <span *ngIf="_dr_phone.hasError('pattern')">Please provide valid phone number.</span>
+            <span *ngIf="_dr_phone.hasError('maxlength')">Only 100 characters allowed for Phone.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <input type="radio" name="dr_gender" formControlName="dr_gender" value="male" > Male
+            <input type="radio" name="dr_gender" formControlName="dr_gender" value="female"> Female
+          </div>
+          <div *ngIf="dr_gender.touched && dr_gender.errors" class="errorMessage">
+            <span *ngIf="_dr_gender.hasError('required')">Gender is required.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorSpecs"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input id="dr_speciality" formControlName="dr_speciality" type="text" class="form-control" placeholder="Sociality - Max 100 Characters" aria-label="Soeciality" aria-describedby="DoctorSpecs">
+          </div>
+          <div *ngIf="dr_speciality.touched && dr_speciality.errors" class="errorMessage">
+            <span *ngIf="_dr_speciality.hasError('required')">Speciality is required.</span>
+            <span *ngIf="_dr_speciality.hasError('maxlength')">Only 100 characters allowed for Speciality.</span>
+            <span *ngIf="_dr_speciality.hasError('minlength')">Atleast 5 characters needed for Speciality.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorAddress"><i class="fas fa-pen-square"></i></span>
+            </div>
+            <input type="text" formControlName="dr_address" class="form-control" placeholder="Address - Max 100 Characters" aria-label="Address" aria-describedby="DoctorAddress">
+          </div>
+          <div *ngIf="dr_address.touched && dr_address.errors" class="errorMessage">
+            <span *ngIf="_dr_address.hasError('required')">Address is required.</span>
+            <span *ngIf="_dr_address.hasError('maxlength')">Only 100 characters allowed for Address.</span>
+            <span *ngIf="_dr_address.hasError('minlength')">Atleast 5 characters needed for Address.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorAbout"><i class="fas fa-info-square"></i></span>
+            </div>
+            <textarea id="dr_about" formControlName="dr_about" type="text" class="form-control" placeholder="About" aria-label="About" aria-describedby="DoctorAbout"></textarea>
+          </div>
+          <div *ngIf="dr_about.touched && dr_about.errors" class="errorMessage">
+            <span *ngIf="_dr_about.hasError('required')">About is required.</span>
+            <span *ngIf="_dr_about.hasError('maxlength')">Only 400 characters allowed for About.</span>
+            <span *ngIf="_dr_about.hasError('minlength')">Atleast 5 characters needed for About.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <button [disabled]="updateForm.invalid" class="btn btn-primary btn-block">UPDATE</button>
+        </li>
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+<!-- EDIT Doctor MODAL END-->
+<!-- Modal Errors-->
+<ng-template #errortemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Doctor</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalErr.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalError}}</p>
+    <ul class="list-group" *ngFor="let erro of errorList">
+      <li class="list-group-item">{{erro}}</li>
+    </ul>
+  </div>
+</ng-template>
+
+<!-- End Of Errors-->

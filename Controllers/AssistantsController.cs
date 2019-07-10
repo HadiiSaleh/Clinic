@@ -45,6 +45,7 @@ namespace Clinic.Controllers
                     var findUser = await _userManager.FindByIdAsync(assistant.as_user_id);
 
                     AssistantModel assistantModel = new AssistantModel();
+                    assistantModel.as_user_id = assistant.as_user_id;
                     assistantModel.as_mname = assistant.as_mname;
                     assistantModel.as_fname = assistant.as_fname;
                     assistantModel.as_lname = assistant.as_lname;
@@ -56,7 +57,7 @@ namespace Clinic.Controllers
                     result.Add(assistantModel);
                 }
 
-                return Ok(new JsonResult(result));
+                return Ok(result);
             }
             else
                 return BadRequest(new JsonResult("No Assistants to show"));
@@ -163,6 +164,9 @@ namespace Clinic.Controllers
                 return BadRequest(ModelState);
             }
 
+            //here we will hold all the errors of registration
+            List<string> errorList = new List<string>();
+
             var findAssistant = _db.Assistants.FirstOrDefault(d => d.as_user_id == id);
 
             var findUser = await _userManager.FindByIdAsync(id);
@@ -186,10 +190,23 @@ namespace Clinic.Controllers
 
             var updateUser = await _userManager.UpdateAsync(findUser);
 
-            await _db.SaveChangesAsync();
+            if (updateUser.Succeeded)
+            {
+                await _db.SaveChangesAsync();
 
-            return Ok(new JsonResult("The Assistant with id " + id + " and name " + findAssistant.as_fname + " " + findAssistant.as_mname + " " + findAssistant.as_lname + " is updated"));
+                return Ok(new JsonResult("The Assistant with id " + id + " and name " + findAssistant.as_fname + " " + findAssistant.as_mname + " " + findAssistant.as_lname + " is updated"));
+            }
 
+            else
+            {
+                foreach (var error in updateUser.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                    errorList.Add(error.Description);
+                }
+            }
+
+            return BadRequest(new JsonResult(errorList));
         }
 
         [HttpDelete("[action]/{id}")]
