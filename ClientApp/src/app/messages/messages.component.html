@@ -21,9 +21,9 @@
             </div>
           </div>
           <div class="form-group">
-            <input id="Subject" formControlName="Subject" type="text" name="Subject" class="form-control" placeholder="Subject *" value="" />
-            <div *ngIf="Subject.touched && Subject.errors" class="errorMessage">
-              <span *ngIf="Subject.hasError('required')">Subject is required.</span>
+            <input id="m_subject" formControlName="m_subject" type="text" name="m_subject" class="form-control" placeholder="Subject *" value="" />
+            <div *ngIf="m_subject.touched && m_subject.errors" class="errorMessage">
+              <span *ngIf="m_subject.hasError('required')">Subject is required.</span>
             </div>
           </div>
           <div class="form-group">
@@ -32,10 +32,10 @@
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <textarea id="Message" formControlName="Message" name="Message" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
-            <div *ngIf="Message.touched && Message.errors" class="errorMessage">
-              <span *ngIf="Message.hasError('required')">Message is required.</span>
-              <span *ngIf="Message.hasError('maxlength')">Only 500 characters allowed for Message.</span>
+            <textarea id="m_message" formControlName="m_message" name="m_message" class="form-control" placeholder="Your Message *" style="width: 100%; height: 150px;"></textarea>
+            <div *ngIf="m_message.touched && m_message.errors" class="errorMessage">
+              <span *ngIf="m_message.hasError('required')">Message is required.</span>
+              <span *ngIf="m_message.hasError('maxlength')">Only 500 characters allowed for Message.</span>
             </div>
           </div>
         </div>

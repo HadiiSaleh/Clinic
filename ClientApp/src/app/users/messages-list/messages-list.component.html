@@ -1,0 +1,47 @@
+<div class="container-fluid">
+
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border hover" style="width:100%">
+    <thead class="text-center thead-dark">
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Subject</th>
+        <th>Date</th>
+        <th>Message</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let message of messages" class="text-center">
+        <td>{{message.m_id}}</td>
+        <td>{{message.sender_username}}</td>
+        <td>{{message.m_subject}}</td>
+        <td>{{message.m_date}}</td>
+        <td>{{message.m_message}}</td>
+        <td>
+          <div class="btn-group mt-2" role="group">
+            <button type="button" class="btn btn-danger" *ngIf="userRoleStatus == 'Admin'" (click)="onDelete(message)"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Errors-->
+<ng-template #errortemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Insurance Company</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalErr.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalError}}</p>
+    <ul class="list-group" *ngFor="let erro of errorList">
+      <li class="list-group-item">{{erro}}</li>
+    </ul>
+  </div>
+</ng-template>
+
+<!-- End Of Errors-->

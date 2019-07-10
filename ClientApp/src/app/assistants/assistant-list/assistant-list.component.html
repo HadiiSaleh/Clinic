@@ -16,7 +16,7 @@
     <tbody>
       <tr *ngFor="let assistant of assistants" class="text-center">
         <td>{{assistant.as_user_id}}</td>
-        <td>{{assistant.as_name | uppercase}}</td>
+        <td>{{assistant.as_fname | uppercase}} {{assistant.as_lname | uppercase}}</td>
         <td>{{assistant.as_username}}</td>
         <td>{{assistant.as_email}}</td>
         <td>{{assistant.as_phone}}</td>
@@ -154,8 +154,9 @@
               <span class="input-group-text" id="DrId"><i class="fas fa-pen-square"></i></span>
             </div>
             <select formControlName="as_dr_id" class="form-control" placeholder="Doctor" aria-label="Doctor" aria-describedby="DrId">
+              <option value="" disabled selected hidden>Please Choose Doctor...</option>
               <option [value]="doctor.dr_id" *ngFor="let doctor of doctors">
-                {{doctor.dr_fname}}
+                {{doctor.dr_fname}} {{doctor.dr_mname}} {{doctor.dr_lname}}
               </option>
             </select>
           </div>
@@ -278,8 +279,10 @@
               <span class="input-group-text" id="DrId"><i class="fas fa-pen-square"></i></span>
             </div>
             <select formControlName="as_dr_id" class="form-control" placeholder="Doctor" aria-label="Doctor" aria-describedby="DrId">
+              <
+              <option value="" disabled selected hidden>Please Choose Doctor...</option>
               <option [value]="doctor.dr_id" *ngFor="let doctor of doctors">
-                {{doctor.dr_fname}}
+                {{doctor.dr_fname}} {{doctor.dr_mname}} {{doctor.dr_lname}}
               </option>
             </select>
           </div>

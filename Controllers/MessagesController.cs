@@ -26,10 +26,32 @@ namespace Clinic.Controllers
         
         [HttpGet("[action]")]
         [Authorize(Policy = "RequireAdminRole")]
-        public IActionResult GetMessages()
+        public async Task<IActionResult> GetMessages()
         {
-            if(_db.Messages.Count()!=0)
-                return Ok(_db.Messages.ToList());
+            if (_db.Messages.Count() != 0)
+            {
+                List<MessageModel> result = new List<MessageModel>();
+
+                var findMessages = _db.Messages.ToList();
+
+                foreach (Message message in findMessages)
+                {
+                    var findUser = await _userManager.FindByIdAsync(message.m_sender_id);
+
+                    MessageModel messageModel = new MessageModel();
+                    messageModel.m_id = message.m_id;
+                    messageModel.m_date = message.m_date;
+                    messageModel.m_message = message.m_message;
+                    messageModel.m_subject = message.m_subject;
+                    messageModel.m_sender_id = message.m_sender_id;
+                    messageModel.sender_username = findUser.UserName;
+                    messageModel.Email = findUser.Email;
+                    
+                    result.Add(messageModel);
+                }
+
+                return Ok(result);
+            }
 
             return BadRequest(new JsonResult("No Messages to show"));
         }
@@ -61,8 +83,8 @@ namespace Clinic.Controllers
                 var newMessage = new Message
                 {
                     m_date = DateTime.Now,
-                    m_message = messageModel.Message,
-                    m_subject = messageModel.Subject,
+                    m_message = messageModel.m_message,
+                    m_subject = messageModel.m_subject,
                     m_sender_id = m_sender.Id
                 };
 

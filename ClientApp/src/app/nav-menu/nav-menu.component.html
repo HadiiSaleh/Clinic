@@ -38,6 +38,7 @@
             <a class="dropdown-item" *ngIf="LoginStatus"><img src="/icons/profile.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Profile</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" *ngIf="(UserRole$ | async)!='Admin'" [routerLink]='["/messages"]'><img src="/icons/contact-us.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Contact Us</a>
+            <a class="dropdown-item" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/messages-list"]'><img src="/icons/contact-us.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Messages</a>
             <a class="dropdown-item" (click)="onLogout()" *ngIf="LoginStatus"><img src="/icons/logout.svg" width="30" height="30" class="d-inline-block align-top" alt="" style="padding-right: 7px;padding-bottom: 7px;">Logout</a>
           </div>
         </li>

@@ -8,6 +8,12 @@ namespace Clinic.Models
 {
     public class DateModel
     {
+        public int date_id;
+
+        public string dr_name;
+
+        public string pat_name;
+
         [Required]
         public int date_pat_id { get; set; }
 

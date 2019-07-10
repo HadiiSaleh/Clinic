@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { MessagesComponent } from './messages/messages.component';
+import { MessagesListComponent } from './users/messages-list/messages-list.component';
 
 const routes: Routes = [
   { path: "home", component: HomeComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'patients', loadChildren: './patients/patients.module#PatientsModule' },
   { path: "reset-password", component: ForgetPasswordComponent },
   { path: "messages", component: MessagesComponent },
+  { path: "messages-list", component: MessagesListComponent },
   { path: "**", redirectTo:"/home" }
 ];
 

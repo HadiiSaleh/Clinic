@@ -12,6 +12,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { JwtInterceptor } from './_helper/jwt.Interceptor';
 import { DataTablesModule } from 'angular-datatables';
+import { MessagesListComponent } from './users/messages-list/messages-list.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { DataTablesModule } from 'angular-datatables';
     MessagesComponent,
     HomeComponent,
     ForgetPasswordComponent,
+    MessagesListComponent,
   ],
   imports: [
     BrowserModule,

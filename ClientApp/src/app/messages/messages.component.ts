@@ -21,8 +21,8 @@ export class MessagesComponent implements OnInit {
   modalRef: BsModalRef;
   Name: FormControl;
   Email: FormControl;
-  Subject: FormControl;
-  Message: FormControl;
+  m_subject: FormControl;
+  m_message: FormControl;
 
   errorList: string[];
   modalMessage: string;
@@ -33,7 +33,7 @@ export class MessagesComponent implements OnInit {
 
     let message = this.insertForm.value;
 
-    this.messageService.send(message.Name, message.Email, message.Subject, message.Message).subscribe(result => {
+    this.messageService.send(message).subscribe(result => {
 
         this.router.navigate(['/home']);
       }, error => {
@@ -54,8 +54,8 @@ export class MessagesComponent implements OnInit {
   ngOnInit() {
     this.Name = new FormControl('', [Validators.required]);
     this.Email = new FormControl('', [Validators.required, Validators.email]);
-    this.Subject = new FormControl('', [Validators.required]);
-    this.Message = new FormControl('', [Validators.required, Validators.maxLength(500)]);
+    this.m_subject = new FormControl('', [Validators.required]);
+    this.m_message = new FormControl('', [Validators.required, Validators.maxLength(500)]);
     
     this.errorList = [];
 
@@ -64,8 +64,8 @@ export class MessagesComponent implements OnInit {
       {
         'Name': this.Name,
         'Email': this.Email,
-        'Subject': this.Subject,
-        'Message': this.Message,
+        'm_subject': this.m_subject,
+        'm_message': this.m_message,
       });
 
   }

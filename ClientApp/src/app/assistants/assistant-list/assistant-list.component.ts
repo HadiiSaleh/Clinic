@@ -100,9 +100,7 @@ export class AssistantListComponent implements OnInit, OnDestroy {
 
         this.assistants$.subscribe(newlist => {
           this.assistants = newlist;
-          for (var i = 0; i < this.assistants.length; i++) {
-            this.assistants[i].as_name = this.assistants[i].as_fname + " " + this.assistants[i].as_mname + " " + this.assistants[i].as_lname;
-          }
+          
           this.modalRef.hide();
           this.insertForm.reset();
           this.rerender();
@@ -153,9 +151,7 @@ export class AssistantListComponent implements OnInit, OnDestroy {
         this.assistants$ = this.assistantService.getAll();
         this.assistants$.subscribe(updatedlist => {
           this.assistants = updatedlist;
-          for (var i = 0; i < this.assistants.length; i++) {
-            this.assistants[i].as_name = this.assistants[i].as_fname + " " + this.assistants[i].as_mname + " " + this.assistants[i].as_lname;
-          }
+          
           this.modalRef.hide();
           this.rerender();
         });
@@ -214,9 +210,7 @@ export class AssistantListComponent implements OnInit, OnDestroy {
       this.assistants$ = this.assistantService.getAll();
       this.assistants$.subscribe(newlist => {
         this.assistants = newlist;
-        for (var i = 0; i < this.assistants.length; i++) {
-          this.assistants[i].as_name = this.assistants[i].as_fname + " " + this.assistants[i].as_mname + " " + this.assistants[i].as_lname;
-        }
+        
         this.rerender();
       });
       console.log("Assistant Deleted");
@@ -268,10 +262,6 @@ export class AssistantListComponent implements OnInit, OnDestroy {
 
     this.assistants$.subscribe(result => {
       this.assistants = result;
-
-      for (var i = 0; i < this.assistants.length; i++) {
-        this.assistants[i].as_name = this.assistants[i].as_fname + " " + this.assistants[i].as_mname + " " + this.assistants[i].as_lname;
-      }
 
       this.chRef.detectChanges();
 

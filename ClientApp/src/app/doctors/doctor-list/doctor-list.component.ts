@@ -100,9 +100,7 @@ export class DoctorListComponent implements OnInit, OnDestroy {
 
         this.doctors$.subscribe(newlist => {
           this.doctors = newlist;
-          for (var i = 0; i < this.doctors.length; i++) {
-            this.doctors[i].dr_name = this.doctors[i].dr_fname + " " + this.doctors[i].dr_mname + " " + this.doctors[i].dr_lname;
-          }
+          
           this.modalRef.hide();
           this.insertForm.reset();
           this.rerender();
@@ -153,9 +151,7 @@ export class DoctorListComponent implements OnInit, OnDestroy {
         this.doctors$ = this.doctorService.getAll();
         this.doctors$.subscribe(updatedlist => {
           this.doctors = updatedlist;
-          for (var i = 0; i < this.doctors.length; i++) {
-            this.doctors[i].dr_name = this.doctors[i].dr_fname + " " + this.doctors[i].dr_mname + " " + this.doctors[i].dr_lname;
-          }
+          
           this.modalRef.hide();
           this.rerender();
         });
@@ -220,9 +216,7 @@ export class DoctorListComponent implements OnInit, OnDestroy {
       this.doctors$ = this.doctorService.getAll();
       this.doctors$.subscribe(newlist => {
         this.doctors = newlist;
-        for (var i = 0; i < this.doctors.length; i++) {
-          this.doctors[i].dr_name = this.doctors[i].dr_fname + " " + this.doctors[i].dr_mname + " " + this.doctors[i].dr_lname;
-        }
+        
         this.rerender();
       });
       console.log("Doctor Deleted");
@@ -274,10 +268,6 @@ export class DoctorListComponent implements OnInit, OnDestroy {
 
     this.doctors$.subscribe(result => {
       this.doctors = result;
-
-      for (var i = 0; i < this.doctors.length; i++) {
-        this.doctors[i].dr_name = this.doctors[i].dr_fname + " " + this.doctors[i].dr_mname + " " + this.doctors[i].dr_lname;
-      }
 
       this.chRef.detectChanges();
 

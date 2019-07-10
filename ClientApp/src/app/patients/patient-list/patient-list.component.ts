@@ -112,9 +112,7 @@ export class PatientListComponent implements OnInit, OnDestroy{
 
         this.patients$.subscribe(newlist => {
           this.patients = newlist;
-          for (var i = 0; i < this.patients.length; i++) {
-            this.patients[i].pat_name = this.patients[i].pat_fname + " " + this.patients[i].pat_mname + " " + this.patients[i].pat_lname;
-          }
+          
           this.modalRef.hide();
           this.insertForm.reset();
           this.rerender();
@@ -165,9 +163,7 @@ export class PatientListComponent implements OnInit, OnDestroy{
         this.patients$ = this.patientService.getAll();
         this.patients$.subscribe(updatedlist => {
           this.patients = updatedlist;
-          for (var i = 0; i < this.patients.length; i++) {
-            this.patients[i].pat_name = this.patients[i].pat_fname + " " + this.patients[i].pat_mname + " " + this.patients[i].pat_lname;
-          }
+
           this.modalRef.hide();
           this.rerender();
         });
@@ -236,9 +232,7 @@ export class PatientListComponent implements OnInit, OnDestroy{
       this.patients$ = this.patientService.getAll();
       this.patients$.subscribe(newlist => {
         this.patients = newlist;
-        for (var i = 0; i < this.patients.length; i++) {
-          this.patients[i].pat_name = this.patients[i].pat_fname + " " + this.patients[i].pat_mname + " " + this.patients[i].pat_lname;
-        }
+        
         this.rerender();
       });
       console.log("Patient Deleted");
@@ -291,10 +285,6 @@ export class PatientListComponent implements OnInit, OnDestroy{
     this.patients$.subscribe(result => {
       this.patients = result;
 
-      for (var i = 0; i < this.patients.length; i++) {
-        this.patients[i].pat_name = this.patients[i].pat_fname + " " + this.patients[i].pat_mname + " " + this.patients[i].pat_lname;
-      }
-
       this.chRef.detectChanges();
 
       this.dtTrigger.next();
@@ -309,6 +299,8 @@ export class PatientListComponent implements OnInit, OnDestroy{
       this.companies = result;
 
     });
+
+    let validateImageUrl: string = '^(https?:\/\/.*\.(?:png|jpg|jpeg))$';
 
     this.errorList = [];
 
@@ -328,7 +320,7 @@ export class PatientListComponent implements OnInit, OnDestroy{
     this.pat_gender = new FormControl('', [Validators.required]);
     this.pat_blood_type = new FormControl('', [Validators.required, Validators.maxLength(4)]);
     this.pat_address = new FormControl('', [Validators.required, Validators.maxLength(100), Validators.minLength(5)]);
-    this.pat_picture = new FormControl('', [Validators.required, Validators.maxLength(500), Validators.minLength(5)]);
+    this.pat_picture = new FormControl('', [Validators.required, Validators.pattern(validateImageUrl), Validators.maxLength(500), Validators.minLength(5)]);
     this.pat_birthday = new FormControl('', [Validators.required]);
     this.pat_insurance_company_name = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
@@ -361,7 +353,7 @@ export class PatientListComponent implements OnInit, OnDestroy{
     this._pat_gender = new FormControl('', [Validators.required]);
     this._pat_blood_type = new FormControl('', [Validators.required, Validators.maxLength(4)]);
     this._pat_address = new FormControl('', [Validators.required, Validators.maxLength(100), Validators.minLength(5)]);
-    this._pat_picture = new FormControl('', [Validators.required, Validators.maxLength(400), Validators.minLength(5)]);
+    this._pat_picture = new FormControl('', [Validators.required, Validators.pattern(validateImageUrl), Validators.maxLength(400), Validators.minLength(5)]);
     this._pat_birthday = new FormControl('', [Validators.required]);
     this._pat_insurance_company_name = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 

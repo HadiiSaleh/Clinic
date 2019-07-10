@@ -6,7 +6,6 @@ export interface Assistant {
   as_lname: string;
   as_email: string;
   as_phone: string;
-  as_name?: string;
   as_dr_id: number;
   as_password: string;
   ConfirmPassword: string;

@@ -21,7 +21,7 @@
     <tbody>
       <tr *ngFor="let patient of patients" class="text-center">
         <td>{{patient.pat_user_id}}</td>
-        <td>{{patient.pat_name | uppercase}}</td>
+        <td>{{patient.pat_fname | uppercase}} {{patient.pat_lname | uppercase}}</td>
         <td>{{patient.pat_gender}}</td>
         <td>{{patient.pat_username}}</td>
         <td>{{patient.pat_email}}</td>
@@ -173,6 +173,7 @@
                     <span class="input-group-text" id="PatientBlood"><i class="fas fa-info-square"></i></span>
                   </div>
                   <select formControlName="pat_blood_type" class="form-control">
+                    <option value="" disabled selected hidden>Please Choose Blood Type...</option>
                     <option [value]="blood" *ngFor="let blood of bloods">
                       {{blood}}
                     </option>
@@ -198,20 +199,14 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="PatientPic"><i class="far fa-image"></i></span>
                   </div>
-                  <input id="pat_picture" formControlName="pat_picture" type="file" class="form-control" placeholder="Picture - Max 100 Characters" aria-label="Picture" aria-describedby="PatientPic">
+                  <input id="pat_picture" formControlName="pat_picture" type="text" class="form-control" placeholder="Picture - https\*\png|jpg - Max 500 Characters" aria-label="Picture" aria-describedby="PatientPic">
                 </div>
                 <div *ngIf="pat_picture.touched && pat_picture.errors" class="errorMessage">
                   <span *ngIf="pat_picture.hasError('required')">Picture is required.</span>
+                  <span *ngIf="pat_picture.hasError('pattern')">Please provide valid Url for the picture.</span>
                   <span *ngIf="pat_picture.hasError('maxlength')">Only 500 characters allowed for Picture.</span>
                   <span *ngIf="pat_picture.hasError('minlength')">Atleast 5 characters needed for Picture.</span>
                 </div>
-                <script type="text/javascript">
-                  function getFilePath() {
-                    $('input[type=file]').change(function () {
-                      console.log(this.files[0].mozFullPath);
-                    });
-                  }
-                </script>
               </li>
               <li class="list-group-item">
                 <div class="input-group">
@@ -232,6 +227,7 @@
                     <span class="input-group-text" id="PatientIns"><i class="fas fa-pen-square"></i></span>
                   </div>
                   <select formControlName="pat_insurance_company_name" class="form-control" placeholder="Insurance Company" aria-label="Insurance Company" aria-describedby="PatientIns">
+                    <option value="" disabled selected hidden>Please Choose An Insurance Company...</option>
                     <option [value]="company.ins_name" *ngFor="let company of companies">
                       {{company.ins_name}}
                     </option>
@@ -389,21 +385,15 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="PatientPic"><i class="far fa-image"></i></span>
             </div>
-            <input id="pat_picture" formControlName="pat_picture" type="file" class="form-control" placeholder="Picture - Max 100 Characters" aria-label="Picture" aria-describedby="PatientPic">
+            <input id="pat_picture" formControlName="pat_picture" type="text" class="form-control" placeholder="Picture - https\*\png|jpg - - Max 500 Characters" aria-label="Picture" aria-describedby="PatientPic">
           </div>
           <div *ngIf="pat_picture.touched && pat_picture.errors" class="errorMessage">
             <span *ngIf="_pat_picture.hasError('required')">Picture is required.</span>
+            <span *ngIf="_pat_picture.hasError('pattern')">Please provide valid Url for the picture.</span>
             <span *ngIf="_pat_picture.hasError('maxlength')">Only 500 characters allowed for Picture.</span>
             <span *ngIf="_pat_picture.hasError('minlength')">Atleast 5 characters needed for Picture.</span>
           </div>
-          <script type="text/javascript">
-            function getFilePath() {
-              $('input[type=file]').change(function () {
-                console.log(this.files[0].mozFullPath);
-              });
-            }
-          </script>
-        </li>
+          </li>
         <li class="list-group-item">
           <div class="input-group">
             <div class="input-group-prepend">

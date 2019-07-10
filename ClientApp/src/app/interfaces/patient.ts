@@ -6,7 +6,6 @@ export interface Patient {
   pat_lname: string;
   pat_email: string;
   pat_phone: string;
-  pat_name?: string;
   pat_address: string;
   pat_gender: string;
   pat_password: string;

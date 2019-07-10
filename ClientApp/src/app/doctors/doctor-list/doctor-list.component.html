@@ -19,7 +19,7 @@
     <tbody>
       <tr *ngFor="let doctor of doctors" class="text-center">
         <td>{{doctor.dr_user_id}}</td>
-        <td>{{doctor.dr_name | uppercase}}</td>
+        <td>{{doctor.dr_fname | uppercase}} {{doctor.dr_lname | uppercase}}</td>
         <td>{{doctor.dr_speciality}}</td>
         <td>{{doctor.dr_gender}}</td>
         <td>{{doctor.dr_username}}</td>

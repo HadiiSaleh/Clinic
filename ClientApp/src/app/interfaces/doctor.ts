@@ -7,7 +7,6 @@ export interface Doctor {
   dr_lname: string;
   dr_email: string;
   dr_phone: string;
-  dr_name?: string;
   dr_address: string;
   dr_about: string;
   dr_speciality: string;
