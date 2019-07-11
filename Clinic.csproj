@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\interfaces\assistant.ts" />
+    <None Remove="ClientApp\src\app\interfaces\date.ts" />
     <None Remove="ClientApp\src\app\interfaces\doctor.ts" />
     <None Remove="ClientApp\src\app\interfaces\message.ts" />
     <None Remove="ClientApp\src\app\interfaces\patient.ts" />
@@ -36,6 +37,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\assistant.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\date.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\doctor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\message.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\patient.ts" />

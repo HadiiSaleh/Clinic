@@ -45,6 +45,7 @@ namespace Clinic.Controllers
                     var findUser = await _userManager.FindByIdAsync(patient.pat_user_id);
 
                     PatientModel patientModel = new PatientModel();
+                    patientModel.pat_id = patient.pat_id;
                     patientModel.pat_user_id = patient.pat_user_id;
                     patientModel.pat_mname = patient.pat_mname;
                     patientModel.pat_fname = patient.pat_fname;

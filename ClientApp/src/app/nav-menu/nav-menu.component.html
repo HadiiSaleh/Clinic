@@ -18,6 +18,9 @@
           <a class="btn btn-primary" *ngIf="LoginStatus" [routerLink]='["/login"]'>Login</a>
         </li>
         <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
+          <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Assistant'" [routerLink]='["/dates"]'>Dates</a>
+        </li>
+        <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">
           <a class="nav-link text-dark" *ngIf="(UserRole$ | async)=='Admin'" [routerLink]='["/insurances"]'>Insurance Company</a>
         </li>
         <li class="nav-item" *ngIf="(LoginStatus$ | async) as LoginStatus">

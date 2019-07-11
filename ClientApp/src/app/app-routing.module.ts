@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'doctors', loadChildren: './doctors/doctors.module#DoctorsModule' },
   { path: 'assistants', loadChildren: './assistants/assistants.module#AssistantsModule' },
   { path: 'patients', loadChildren: './patients/patients.module#PatientsModule' },
+  { path: 'dates', loadChildren: './dates/dates.module#DatesModule' },
   { path: "reset-password", component: ForgetPasswordComponent },
   { path: "messages", component: MessagesComponent },
   { path: "messages-list", component: MessagesListComponent },

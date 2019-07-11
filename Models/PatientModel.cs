@@ -10,6 +10,8 @@ namespace Clinic.Models
     {
         public string pat_user_id { get; set; }
 
+        public int pat_id;
+
         [StringLength(50, ErrorMessage = "Maximum length is {1}")]
         [RegularExpression("^[A-Za-z]+$")]
         public String pat_fname { get; set; }

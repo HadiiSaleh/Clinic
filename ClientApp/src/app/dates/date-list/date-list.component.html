@@ -1,0 +1,171 @@
+<div class="container-fluid">
+
+  <button class="btn btn-warning mb-3 float-right text-uppercase" *ngIf="userRoleStatus == 'Assistant'" (click)="onAddDate(date)"><i class="fa fa-plus"></i> Add Date</button>
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border hover" style="width:100%">
+    <thead class="text-center thead-dark">
+      <tr>
+        <th>Id</th>
+        <th>Doctor Name</th>
+        <th>Patient</th>
+        <th>Date And Time</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let date of dates" class="text-center">
+        <td>{{date.date_id}}</td>
+        <td>{{date.dr_name | uppercase}} </td>
+        <td>{{date.pat_name | uppercase}}</td>
+        <td>{{date.date_dateTime}}</td>
+        <td>
+          <div class="btn-group mt-2" role="group">
+            <button type="button" class="btn btn-success" (click)="onSelect(date)"><i class="fas fa-list"></i></button>
+            <button type="button" class="btn btn-primary" *ngIf="userRoleStatus == 'Assistant'" (click)="onUpdateModal(date)"><i class="fas fa-edit"></i></button>
+            <button type="button" class="btn btn-danger" *ngIf="userRoleStatus == 'Assistant'" (click)="onDelete(date)"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- ADD Date MODAL START-->
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title">ADD NEW PATIENT</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" disabled id="date_dr_id" formControlName="date_dr_id" class="form-control" aria-label="DoctorName" aria-describedby="DoctorName">
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="PatientName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <select formControlName="date_pat_id" class="form-control">
+              <option value="" disabled selected hidden>Please Choose Patient Name...</option>
+              <option [value]="patient.pat_id" *ngFor="let patient of patients">
+                {{patient.pat_fname}} {{patient.pat_mname}} {{patient.pat_lname}}
+              </option>
+            </select>
+          </div>
+          <div class="errorMessage" *ngIf="date_pat_id.touched && date_pat_id.errors">
+            <span *ngIf="date_pat_id.hasError('required')">Patient Name is required.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Date"><i class="fas fa-pen-square"></i></span>
+            </div>
+            <input type="datetime-local" min="1900-01-01" max="2019-01-01" formControlName="date_dateTime" class="form-control" placeholder="Date" aria-label="Date" aria-describedby="Date">
+          </div>
+          <div *ngIf="date_dateTime.touched && date_dateTime.errors" class="errorMessage">
+            <span *ngIf="date_dateTime.hasError('required')">Date is required.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <button [disabled]="insertForm.invalid" class="btn btn-primary btn-block">ADD</button>
+        </li>
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+<!-- ADD Date MODAL START-->
+<!-- EDIT Date MODAL START-->
+
+<ng-template #editTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">EDIT PATIENT DETAILS</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+    <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Id"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" disabled id="date_id" formControlName="date_id" class="form-control" placeholder="Id " aria-label="Id" aria-describedby="Id">
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="DoctorName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <input type="text" disabled id="date_dr_id" formControlName="date_dr_id" class="form-control" aria-label="DoctorName" aria-describedby="DoctorName">
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="PatientName"><i class="fa fa-pen-square"></i></span>
+            </div>
+            <select formControlName="date_pat_id" class="form-control">
+              <option [value]="patient.pat_id" *ngFor="let patient of patients">
+                {{patient.pat_fname}} {{patient.pat_mname}} {{patient.pat_lname}}
+              </option>
+            </select>
+          </div>
+          <div class="errorMessage" *ngIf="date_pat_id.touched && date_pat_id.errors">
+            <span *ngIf="_date_pat_id.hasError('required')">Patient Name is required.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Date"><i class="fas fa-pen-square"></i></span>
+            </div>
+            <input type="datetime-local" min="1900-01-01" max="2019-01-01" formControlName="date_dateTime" class="form-control" placeholder="Date" aria-label="Date" aria-describedby="Date">
+          </div>
+          <div *ngIf="date_dateTime.touched && date_dateTime.errors" class="errorMessage">
+            <span *ngIf="_date_dateTime.hasError('required')">Date is required.</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <button [disabled]="updateForm.invalid" class="btn btn-primary btn-block">UPDATE</button>
+        </li>
+      </ul>
+
+    </form>
+
+  </div>
+</ng-template>
+
+<!-- EDIT Date MODAL END-->
+<!-- Modal Errors-->
+<ng-template #errortemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Date</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalErr.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="list-group-item active">{{modalError}}</p>
+    <ul class="list-group" *ngFor="let erro of errorList">
+      <li class="list-group-item">{{erro}}</li>
+    </ul>
+  </div>
+</ng-template>
+
+<!-- End Of Errors-->

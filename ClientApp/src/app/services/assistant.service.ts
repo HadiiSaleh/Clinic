@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { flatMap, first, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Assistant } from '../interfaces/assistant';
+import { Doctor } from '../interfaces/doctor';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class AssistantService {
   private baseUrlGetAll: string = "/api/assistants/GetAssistantsAsync";
   private updateUrl: string = "/api/assistants/UpdateAssistant";
   private deleteUrl: string = "/api/assistants/DeleteAssistant";
+  private baseUrlGetDoctorByUsername: string = "/api/assistants/GetDoctorByUsername";
 
   private Assistants$: Observable<Assistant[]>;
 
@@ -46,6 +48,11 @@ export class AssistantService {
 
     // if Assistant cache exists return it
     return this.Assistants$;
+  }
+
+  // Get Doctor the username of the assistant
+  getDoctorByUsername(username: string): Observable<Doctor> {
+    return this.http.get<Doctor>(this.baseUrlGetDoctorByUsername + "/" + username);
   }
 
   // Get Assistant its ID

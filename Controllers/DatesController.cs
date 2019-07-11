@@ -30,7 +30,30 @@ namespace Clinic.Controllers
         public IActionResult GetDates()
         {
             if (_db.Dates.Count() != 0)
-                return Ok(_db.Dates.ToList());
+            {
+                List<DateModel> result = new List<DateModel>();
+                var findDate = _db.Dates.ToList();
+
+                foreach (Date date in findDate)
+                {
+                    var findDoctor = _db.Doctors.FirstOrDefault(d => d.dr_id == date.date_dr_id);
+
+                    var findPatient = _db.Patients.FirstOrDefault(p => p.pat_id == date.date_pat_id);
+
+                    DateModel dateModel = new DateModel();
+                    dateModel.date_id = date.date_id;
+                    dateModel.date_pat_id = date.date_pat_id;
+                    dateModel.date_dr_id = date.date_dr_id;
+                    dateModel.date_dateTime = date.date_dateTime;
+                    dateModel.dr_name = findDoctor.dr_fname+" "+ findDoctor.dr_mname+" "+ findDoctor.dr_lname;
+                    dateModel.pat_name = findPatient.pat_fname+" "+ findPatient.pat_mname+" "+ findPatient.pat_lname;
+
+                    result.Add(dateModel);
+
+                }
+                return Ok(result);
+            }
+
             else
                 return BadRequest(new JsonResult("No Dates to show"));
         }

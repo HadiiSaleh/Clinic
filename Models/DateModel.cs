@@ -20,7 +20,7 @@ namespace Clinic.Models
         [Required]
         public int date_dr_id { get; set; }
 
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime date_dateTime { get; set; }
     }
 }

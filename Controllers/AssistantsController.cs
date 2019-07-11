@@ -90,6 +90,40 @@ namespace Clinic.Controllers
                 return NotFound();
         }
 
+        [HttpGet("[action]/{username}")]
+        [Authorize(Policy = "RequireAdminAssistantPatientRole")]
+        public async Task<IActionResult> GetDoctorByUsername([FromRoute]string username)
+        {
+            var findUser = await _userManager.FindByNameAsync(username);
+
+            var findAssistant = _db.Assistants.FirstOrDefault(a => a.as_user_id == findUser.Id);
+
+            if (findAssistant != null && findUser != null)
+            {
+                var findDoctor = _db.Doctors.FirstOrDefault(d => d.dr_id == findAssistant.as_dr_id);
+
+                if (findDoctor != null && findUser != null)
+                {
+                    DoctorModel doctor = new DoctorModel();
+                    doctor.dr_id = findDoctor.dr_id;
+                    doctor.dr_user_id = findDoctor.dr_user_id;
+                    doctor.dr_fname = findDoctor.dr_fname;
+                    doctor.dr_mname = findDoctor.dr_mname;
+                    doctor.dr_lname = findDoctor.dr_lname;
+                    doctor.dr_gender = findDoctor.dr_gender;
+                    doctor.dr_speciality = findDoctor.dr_speciality;
+                    doctor.dr_address = findDoctor.dr_address;
+                    doctor.dr_about = findDoctor.dr_about;
+
+                    return Ok(doctor);
+                }
+                return NotFound();
+            }
+
+            else
+                return NotFound();
+        }
+
         [HttpPost("[action]")]
         [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> AddAssistant([FromBody] AssistantModel assistant)
